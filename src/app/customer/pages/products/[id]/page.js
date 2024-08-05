@@ -61,7 +61,7 @@ const ProductPage = () => {
     setCart(updatedCart);
     localStorage.setItem('cart', JSON.stringify(updatedCart));
     calculateTotal(updatedCart);
-    toast.success(`${product.name} added to cart!`);
+    // toast.success(`${product.name} added to cart!`);
   };
 
   const updateItemQuantity = (itemId, quantity) => {
