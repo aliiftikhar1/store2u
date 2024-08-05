@@ -15,7 +15,7 @@ const TopBar = () => {
             <span>/</span>
             <a href="/customer/pages/aboutus" className="hover:underline">About US</a>
           </div>
-          <div className="hidden md:block w-[62vw] overflow-x-hidden">
+          <div className="hidden md:block w-[60vw] overflow-x-hidden">
             <motion.div
               className="flex items-center space-x-2 text-gray-600 whitespace-nowrap"
               initial={{ x: '100%' }}

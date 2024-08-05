@@ -1,5 +1,7 @@
 {
   "/page": "app/page.js",
-  "/customer/pages/contactus/page": "app/customer/pages/contactus/page.js",
-  "/customer/pages/aboutus/page": "app/customer/pages/aboutus/page.js"
+  "/customer/pages/checkout/page": "app/customer/pages/checkout/page.js",
+  "/customer/pages/login/page": "app/customer/pages/login/page.js",
+  "/customer/pages/orders/page": "app/customer/pages/orders/page.js",
+  "/customer/pages/register/page": "app/customer/pages/register/page.js"
 }

@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
 
 const LoginForm = () => {
@@ -58,9 +57,9 @@ const LoginForm = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center ">
-      <div className="bg-gradient-to-r from-white via-gray-100 to-white p-8 rounded-lg shadow-lg w-full max-w-xl">
+      <div className="bg-white  p-8 rounded-lg  w-full max-w-xl">
         <div className="flex justify-center flex-col items-center mb-6">
-          <img className="w-32 h-32" src="/store2u.webp" alt="Logo" />
+          <img className="w-40" src="/store2ulogo.png" alt="Logo" />
           <h2 className="text-3xl font-bold mt-4">User Login</h2>
         </div>
         <form onSubmit={handleSubmit}>
@@ -99,6 +98,15 @@ const LoginForm = () => {
           </button>
           {status && <p className="mt-4 text-center text-red-500">{status}</p>}
         </form>
+        <div className="mt-4 text-center">
+          <p className="text-gray-700">Don't have an account?</p>
+          <button
+            onClick={() => router.push('/customer/pages/register')}
+            className="mt-2 py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+          >
+            Register
+          </button>
+        </div>
       </div>
     </div>
   );

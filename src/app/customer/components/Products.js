@@ -96,8 +96,8 @@ const Products = () => {
 
           return (
             <div key={category.id} className="mb-12">
-              <div className="flex">
-                <div className="w-1/4 pr-4">
+              <div className="flex md:flex-row flex-col">
+                <div className="md:w-1/4 w-full pr-4">
                   {category.imageUrl ? (
                     <img
                       src={`https://data.tascpa.ca/uploads/${category.imageUrl}`}
@@ -105,14 +105,14 @@ const Products = () => {
                       className="w-full h-[300px] rounded-lg shadow-md"
                     />
                   ) : (
-                    <div className="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">
+                    <div className="w-full sm:w-full md:w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">
                       No Image
                     </div>
                   )}
                   <h3 className="text-xl text-gray-800 font-normal mt-4">{category.name}</h3>
                   <p className="text-gray-500 mt-2">{category.description}</p>
                 </div>
-                <div className="w-3/4 relative">
+                <div className="md:w-3/4 w-1/2 relative">
                   <FiChevronLeft
                     className="h-6 w-6 text-gray-500 cursor-pointer absolute left-0 top-1/2 transform -translate-y-1/2 z-10"
                     onClick={() => scrollLeft(index)}
@@ -122,7 +122,9 @@ const Products = () => {
                       categoryProducts.map((product) => (
                         <div
                           key={product.id}
-                          className="bg-white shadow-md rounded-lg p-4 relative cursor-pointer w-60 h-72 flex-shrink-0 border border-gray-300"
+                          className="bg-white
+                          
+                          shadow-md rounded-lg p-4 relative cursor-pointer w-60 h-72 flex-shrink-0 border border-gray-300"
                           onClick={() => handleProductClick(product.id)}
                         >
                           {product.images && product.images.length > 0 ? (
@@ -140,16 +142,14 @@ const Products = () => {
                           )}
                           <div className=" grid grid-cols-2 ">
                             <div>
-                          <h3 className="text-xl mb-2 overflow-hidden text-ellipsis whitespace-nowrap">{product.name}</h3>
+                          <h3 className="text-sm mb-2 overflow-hidden text-ellipsis whitespace-nowrap">{product.name}</h3>
                           <p className="text-lg font-medium text-gray-700 mb-1">Rs.{product.price}</p>
                           </div>
                           <div>
-                          <p className="text-md font-medium text-gray-500 mb-1">Quantity: {product.stock}</p>
+                          <p className="text-md font-medium text-right text-gray-500 mb-1">QTY: {product.stock}</p>
                           </div>
                           
                           </div>
-                          
-                          <p className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap" dangerouslySetInnerHTML={{ __html: product.description }}></p>
                           
                         </div>
                         
