@@ -1,1 +1,8 @@
-{}
+{
+  "app\\admin\\pages\\Products\\FilterableTable.js -> react-quill": {
+    "id": "app\\admin\\pages\\Products\\FilterableTable.js -> react-quill",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_react-quill_lib_index_js.js"
+    ]
+  }
+}

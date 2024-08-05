@@ -154,7 +154,7 @@ const Register = () => {
             required
           />
         </div>
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label className="block text-gray-700">Role</label>
           <select
             name="role"
@@ -163,9 +163,9 @@ const Register = () => {
             className="w-full px-4 py-2 border rounded-md"
           >
             <option value="CUSTOMER">Customer</option>
-            <option value="ADMIN">Admin</option>
+            
           </select>
-        </div>
+        </div> */}
         <div className="mb-4">
           <label className="block text-gray-700">Profile Image</label>
           <input

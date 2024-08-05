@@ -12,10 +12,15 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/customer/pages/allproducts/[id]/page": [
+    "/admin/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/customer/pages/allproducts/[id]/page.js"
+      "static/chunks/app/admin/page.js"
+    ],
+    "/customer/pages/checkout/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/customer/pages/checkout/page.js"
     ],
     "/customer/layout": [
       "static/chunks/webpack.js",
@@ -23,10 +28,48 @@
       "static/css/app/customer/layout.css",
       "static/chunks/app/customer/layout.js"
     ],
-    "/customer/pages/products/[id]/page": [
+    "/customer/pages/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/customer/pages/products/[id]/page.js"
+      "static/chunks/app/customer/pages/login/page.js"
+    ],
+    "/customer/pages/cart/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/customer/pages/cart/page.css",
+      "static/chunks/app/customer/pages/cart/page.js"
+    ],
+    "/customer/pages/orders/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/customer/pages/orders/page.js"
+    ],
+    "/customer/pages/register/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/customer/pages/register/page.js"
+    ],
+    "/admin/pages/Products/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/pages/Products/page.css",
+      "static/chunks/app/admin/pages/Products/page.js"
+    ],
+    "/admin/pages/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin/pages/layout.js"
+    ],
+    "/admin/pages/register/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin/pages/register/page.js"
+    ],
+    "/admin/pages/customer/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/pages/customer/page.css",
+      "static/chunks/app/admin/pages/customer/page.js"
     ]
   }
 }

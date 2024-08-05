@@ -83,7 +83,48 @@ const CheckoutPage = () => {
     return subtotalAfterDiscount + tax + deliveryCharge;
   };
 
+  const validateForm = () => {
+    const {
+      recipientName,
+      streetAddress,
+      city,
+      state,
+      zip,
+      country,
+      phoneNumber,
+      email
+    } = shippingAddress;
+
+    if (
+      !recipientName ||
+      !streetAddress ||
+      !city ||
+      !state ||
+      !zip ||
+      !country ||
+      !phoneNumber ||
+      !email
+    ) {
+      alert('Please fill in all required shipping address fields.');
+      return false;
+    }
+
+    if (paymentMethod === 'Credit Card') {
+      const { cardNumber, cardName, expiryDate, cvv } = paymentInfo;
+      if (!cardNumber || !cardName || !expiryDate || !cvv) {
+        alert('Please fill in all required credit card information.');
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   const handlePlaceOrder = async () => {
+    if (!validateForm()) {
+      return;
+    }
+
     try {
       const token = sessionStorage.getItem('authToken'); // Retrieve the auth token from session storage
 
