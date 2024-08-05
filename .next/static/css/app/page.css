@@ -761,6 +761,9 @@ video {
 .h-full {
   height: 100%;
 }
+.max-h-0 {
+  max-height: 0px;
+}
 .max-h-\[90vh\] {
   max-height: 90vh;
 }
@@ -1447,6 +1450,9 @@ video {
 }
 .duration-300 {
   transition-duration: 300ms;
+}
+.duration-500 {
+  transition-duration: 500ms;
 }
 .ease-in-out {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
