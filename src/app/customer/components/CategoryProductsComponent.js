@@ -105,7 +105,7 @@ const SubcategoryProductsComponent = () => {
                     <motion.img
                       src={`https://data.tascpa.ca/uploads/${product.images[0].url}`}
                       alt={product.name}
-                      className="h-32 w-full object-cover mb-4 rounded"
+                      className="h-40 w-full object-cover mb-4 rounded"
                       whileHover={{ scale: 1.1 }}
                       transition={{ duration: 0.3 }}
                       onError={(e) => {
@@ -125,11 +125,11 @@ const SubcategoryProductsComponent = () => {
                           <p className="text-lg font-medium text-gray-700 mb-1">Rs.{product.price}</p>
                           </div>
                           <div>
-                          <p className="text-md font-medium text-gray-500 mb-1">Quantity: {product.stock}</p>
+                          <p className="text-md font-medium text-gray-500 mb-1">QTY : {product.stock}</p>
                           </div>
                           
                           </div>
-                  <p className="text-gray-500 overflow-hidden text-ellipsis h-12"dangerouslySetInnerHTML={{ __html: product.description }}></p>
+                  
                   
                 </motion.div>
               ))

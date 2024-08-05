@@ -3,7 +3,7 @@
 import React from "react";
 import { RxGlobe } from "react-icons/rx";
 import { MdKeyboardArrowDown, MdCopyright } from "react-icons/md";
-import { FaFacebook, FaTwitter, FaPinterest, FaInstagram } from "react-icons/fa";
+import { FaFacebook, FaEnvelope, FaTiktok, FaInstagram } from 'react-icons/fa';
 import Link from 'next/link';
 
 const Footer = () => {
@@ -13,7 +13,7 @@ const Footer = () => {
         <div className="flex flex-col gap-2 col-span-4">
           <Link href="/" legacyBehavior>
             <a className="focus:outline-none">
-              <img src="/store2ulogo.png" className="cursor-pointer w-[300px] h-[100px] " alt="Store2u Logo" />
+              <img src="/store2ulogo.png" className="cursor-pointer w-[300px]  " alt="Store2u Logo" />
             </a>
           </Link>
           <p className="text-[15px] font-[400] md:mr-10 sm:mr-10 lg:mr-10 xl:mr-10 text-justify">
@@ -22,11 +22,7 @@ const Footer = () => {
         </div>
         <div className="flex flex-col gap-2 col-span-2">
           <p className="text-[20px] font-[600]">Company</p>
-          <Link href="/customer/pages/aboutus" legacyBehavior>
-            <a className="hover:no-underline">
-              <p className="text-[15px] font-[400]">About Us</p>
-            </a>
-          </Link>
+          
           <Link href="/customer/pages/privacypolicy" legacyBehavior>
             <a className="hover:no-underline">
               <p className="text-[15px] font-[400]">Privacy Policy</p>
@@ -47,27 +43,15 @@ const Footer = () => {
               <p className="text-[15px] font-[400]">Return & Exchange Policy</p>
             </a>
           </Link>
-          <Link href="/customer/pages/contactus" legacyBehavior>
-            <a className="hover:no-underline">
-              <p className="text-[15px] font-[400]">Contact Us</p>
-            </a>
-          </Link>
-          <Link href="/affiliate-program" legacyBehavior>
-            <a className="hover:no-underline">
-              <p className="text-[15px] font-[400]">Affiliate Program</p>
-            </a>
-          </Link>
+          
+          
         </div>
         <div className="flex flex-col gap-2 col-span-2">
           <p className="text-[20px] font-[600]">Explore</p>
-          <Link href="/promotions" legacyBehavior>
+          
+          <Link href="/customer/pages/aboutus" legacyBehavior>
             <a className="hover:no-underline">
-              <p className="text-[15px] font-[400]">Promotions</p>
-            </a>
-          </Link>
-          <Link href="/new-arrivals" legacyBehavior>
-            <a className="hover:no-underline">
-              <p className="text-[15px] font-[400]">New Arrivals</p>
+              <p className="text-[15px] font-[400]">About Us</p>
             </a>
           </Link>
           <Link href="/customer/pages/faq" legacyBehavior>
@@ -75,31 +59,19 @@ const Footer = () => {
               <p className="text-[15px] font-[400]">FAQs</p>
             </a>
           </Link>
-          <Link href="/categories" legacyBehavior>
+          <Link href="/customer/pages/contactus" legacyBehavior>
             <a className="hover:no-underline">
-              <p className="text-[15px] font-[400]">Categories</p>
+              <p className="text-[15px] font-[400]">Contact Us</p>
             </a>
           </Link>
-          <Link href="/customer-reviews" legacyBehavior>
-            <a className="hover:no-underline">
-              <p className="text-[15px] font-[400]">Customer Reviews</p>
-            </a>
-          </Link>
+          
         </div>
         <div className="flex flex-col gap-2 col-span-2">
           <p className="text-[20px] font-[600]">Support</p>
-          <Link href="/help-center" legacyBehavior>
-            <a className="hover:no-underline">
-              <p className="text-[15px] font-[400]">Help Center</p>
-            </a>
-          </Link>
-          <Link href="/pricing" legacyBehavior>
-            <a className="hover:no-underline">
-              <p className="text-[15px] font-[400]">Pricing</p>
-            </a>
-          </Link>
-          <p className="text-[15px] font-[400]">Email: support@store2u.com</p>
-          <p className="text-[15px] font-[400]">Phone: +1234 567 890</p>
+          
+          
+          <p className="text-[15px] font-[400]">Email: info@store2u.ca</p>
+          <p className="text-[15px] font-[400]">Phone: +92310356111</p>
         </div>
       </div>
 
@@ -117,11 +89,20 @@ const Footer = () => {
           <p>Privacy policy | Terms</p>
         </div>
         <div className="flex gap-[6px] w-[250px] justify-center">
-          <FaFacebook className="h-8 w-8" />
-          <FaTwitter className="h-8 w-8" />
-          <FaPinterest className="h-8 w-8" />
-          <FaInstagram className="h-8 w-8" />
-        </div>
+      <a href="https://www.facebook.com/profile.php?id=61557692016335" target="_blank" rel="noopener noreferrer">
+        <FaFacebook className="h-8 w-8 text-blue-600 hover:text-blue-800" />
+      </a>
+      <a href="mailto:info@store2u.ca">
+        <FaEnvelope className="h-8 w-8 text-gray-600 hover:text-gray-800" />
+      </a>
+      <a href="https://www.tiktok.com/@www.store2u.ca?lang=en" target="_blank" rel="noopener noreferrer">
+        <FaTiktok className="h-8 w-8 text-black hover:text-gray-800" />
+      </a>
+      
+      <a href="https://www.instagram.com/store2u.ca" target="_blank" rel="noopener noreferrer">
+        <FaInstagram className="h-8 w-8 text-pink-600 hover:text-pink-800" />
+      </a>
+    </div>
       </div>
     </>
   );

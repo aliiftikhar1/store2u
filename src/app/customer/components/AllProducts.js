@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { ThreeDots } from 'react-loader-spinner';
+import { FiPlus } from 'react-icons/fi';
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
@@ -30,6 +31,20 @@ const AllProducts = () => {
     router.push(`/customer/pages/products/${id}`);
   };
 
+  const handleAddToCart = (product) => {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingProductIndex = cart.findIndex(item => item.id === product.id);
+
+    if (existingProductIndex >= 0) {
+      cart[existingProductIndex].quantity += 1;
+    } else {
+      cart.push({ ...product, quantity: 1 });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert(`${product.name} has been added to the cart.`);
+  };
+
   const showMoreProducts = () => {
     setVisibleProducts((prevVisibleProducts) => prevVisibleProducts + 14); // Load 2 more rows (7 products each)
   };
@@ -51,13 +66,12 @@ const AllProducts = () => {
 
   return (
     <div className="container mx-auto py-8">
-      <h2 className="text-2xl font-bold mb-6">Top Ratted</h2>
+      <h2 className="text-2xl font-bold mb-6">Top Rated</h2>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
         {products.slice(0, visibleProducts).map((product) => (
           <div
             key={product.id}
-            className="bg-white shadow-md rounded-lg p-4 cursor-pointer border border-gray-300"
-            onClick={() => handleProductClick(product.id)}
+            className="bg-white shadow-md rounded-lg p-4 cursor-pointer border border-gray-300 relative"
           >
             {product.images && product.images.length > 0 ? (
               <motion.img
@@ -66,14 +80,24 @@ const AllProducts = () => {
                 className="h-40 w-full object-cover mb-4 rounded"
                 whileHover={{ scale: 1.1 }}
                 transition={{ duration: 0.3 }}
+                onClick={() => handleProductClick(product.id)}
               />
             ) : (
-              <div className="h-40 w-full bg-gray-200 mb-4 rounded flex items-center justify-center text-gray-500">
+              <div
+                className="h-40 w-full bg-gray-200 mb-4 rounded flex items-center justify-center text-gray-500"
+                onClick={() => handleProductClick(product.id)}
+              >
                 No Image
               </div>
             )}
             <h3 className="text-sm font-medium text-gray-800 overflow-hidden text-ellipsis whitespace-nowrap">{product.name}</h3>
             <p className="text-lg font-medium text-gray-700">Rs.{product.price}</p>
+            <button
+                className="absolute bottom-4 right-4 border border-gray-300 text-gray-700 hover:text-blue-500 hover:border-blue-500 transition-colors duration-300 rounded-full p-2 bg-white shadow-lg"
+                onClick={() => handleAddToCart(product)}
+              >
+                <FiPlus className="h-5 w-5" />
+              </button>
           </div>
         ))}
       </div>

@@ -2,7 +2,8 @@
 'use client';
 
 import React from 'react';
-import { FiChevronRight, FiPhone, FiFacebook, FiTwitter, FiInstagram } from 'react-icons/fi';
+import { FiChevronRight, FiPhone, FiFacebook, FiInstagram } from 'react-icons/fi';
+import { FaTiktok, FaEnvelope } from 'react-icons/fa'; // Importing necessary icons
 import { motion } from 'framer-motion';
 
 const TopBar = () => {
@@ -30,20 +31,20 @@ const TopBar = () => {
         </div>
         <div className="flex items-center space-x-4 text-sm">
           <div className="flex items-center space-x-2 text-lg">
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-800 hover:text-blue-500">
+            <a href="https://www.facebook.com/profile.php?id=61557692016335" target="_blank" rel="noopener noreferrer" className="text-gray-800 hover:text-blue-500">
               <FiFacebook />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-800 hover:text-blue-500">
-              <FiTwitter />
+            <a href="mailto:info@store2u.ca" className="text-gray-800 hover:text-blue-500">
+              <FaEnvelope />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-800 hover:text-blue-500">
+            <a href="https://www.instagram.com/store2u.ca" target="_blank" rel="noopener noreferrer" className="text-gray-800 hover:text-pink-500">
               <FiInstagram />
             </a>
-            <a href="tel:+923128807795" target="_blank" rel="noopener noreferrer" className="text-gray-800 hover:text-blue-500">
-            <FiPhone />
+            <a href="https://www.tiktok.com/@www.store2u.ca?lang=en" target="_blank" rel="noopener noreferrer" className="text-gray-800 hover:text-black">
+              <FaTiktok />
             </a>
+            
           </div>
-         
         </div>
       </div>
     </div>
