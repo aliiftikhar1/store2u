@@ -653,9 +653,6 @@ video {
 .mb-8 {
   margin-bottom: 2rem;
 }
-.ml-1 {
-  margin-left: 0.25rem;
-}
 .ml-2 {
   margin-left: 0.5rem;
 }
@@ -824,20 +821,17 @@ video {
 .w-\[250px\] {
   width: 250px;
 }
-.w-\[60vw\] {
-  width: 60vw;
-}
 .w-\[680px\] {
   width: 680px;
 }
 .w-\[700px\] {
   width: 700px;
 }
-.w-full {
-  width: 100%;
-}
 .w-\[70vw\] {
   width: 70vw;
+}
+.w-full {
+  width: 100%;
 }
 .min-w-full {
   min-width: 100%;

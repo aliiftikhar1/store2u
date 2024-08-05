@@ -173,7 +173,7 @@ const Header = () => {
                       </button>
                     </>
                   ) : (
-                    <Link href="/customer/pages/login" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Sign in</Link>
+                    <Link href="/customer/pages/login" className="block px-4 text-lg py-2 text-gray-700 hover:bg-gray-100">Sign in</Link>
                   )}
                 </div>
               </div>
@@ -207,7 +207,7 @@ const Header = () => {
             </>
           ) : (
             <div className="hidden lg:flex items-center">
-              <Link href="/customer/pages/login" className="text-gray-700 hover:text-blue-500 transition-colors duration-300">Sign in</Link>
+              <Link href="/customer/pages/login" className="text-gray-700 text-sm mr-2 hover:text-blue-500 transition-colors duration-300">Sign in</Link>
             </div>
           )}
         </div>
