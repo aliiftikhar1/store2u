@@ -167,7 +167,7 @@ const LoginPage = () => {
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
-          <div className="mt-4 text-center">
+          {/* <div className="mt-4 text-center">
             <p className="text-gray-700">Don't have an account?</p>
             <button
               type="button"
@@ -176,7 +176,7 @@ const LoginPage = () => {
             >
               Register
             </button>
-          </div>
+          </div> */}
         </form>
       ) : (
         <form className="bg-white p-8 rounded shadow-md w-full max-w-md" onSubmit={handleRegister}>
