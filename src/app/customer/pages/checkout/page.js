@@ -242,6 +242,7 @@ const CheckoutPage = () => {
               value={shippingAddress.email}
               onChange={(e) => setShippingAddress({ ...shippingAddress, email: e.target.value })}
               className="w-full pl-10 px-4 py-2 border rounded-md"
+              required
             />
           </div>
         </div>

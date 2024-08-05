@@ -115,10 +115,8 @@ const ProductPage = () => {
 
   return (
     <div className="container mx-auto px-4">
-      <div className="flex justify-between mb-6">
-        <h2 className="text-2xl font-semibold">Product Page</h2>
-      </div>
-      <div className="flex flex-wrap">
+      
+      <div className="flex flex-wrap pt-4">
         <div className="w-full lg:w-1/2 mb-8 lg:mb-0">
           <div className="relative">
             {product.images && product.images.length > 0 ? (
@@ -150,7 +148,7 @@ const ProductPage = () => {
           </div>
         </div>
         <div className="w-full lg:w-1/2 lg:pl-20">
-          <h2 className="text-xl mb-4">{product.name}</h2>
+          <h2 className="text-xl font-bold mb-4">{product.name}</h2>
           <div className="flex items-center mb-4">
             {product.originalPrice && (
               <span className="text-red-500 font-bold line-through mr-4">Rs.{product.originalPrice}</span>
@@ -209,7 +207,7 @@ const ProductPage = () => {
 
       <button
         onClick={() => setCartVisible(true)}
-        className="fixed bottom-4 right-4 bg-teal-500 text-white p-4 rounded-full shadow-lg z-50"
+        className="fixed bottom-24 right-6 bg-teal-500 text-white p-4 rounded-full shadow-lg z-50"
       >
         <FiShoppingCart className="h-8 w-8" />
         {cart.length > 0 && (

@@ -40,7 +40,7 @@ const CartPage = () => {
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * (item.quantity || 1), 0);
     const calculatedTax = subtotal * taxRate;
     setTax(calculatedTax);
-    setTotal(subtotal + calculatedTax + deliveryCharge);
+    setTotal(subtotal  + deliveryCharge);
   };
 
   const handleCheckout = () => {
@@ -158,12 +158,12 @@ const CartPage = () => {
           <div className="bg-white shadow-lg rounded-lg p-4 flex flex-col gap-2">
             <div className="flex justify-between">
               <p className="text-xl font-bold text-gray-700">Subtotal:</p>
-              <p className="text-md text-gray-700">Rs.{(total - tax - deliveryCharge).toFixed(2)}</p>
+              <p className="text-md text-gray-700">Rs.{(total ).toFixed(2)}</p>
             </div>
-            <div className="flex justify-between">
+            {/* <div className="flex justify-between">
               <p className="text-md font-medium text-gray-700">Tax ({(taxRate * 100).toFixed(2)}%):</p>
               <p className="text-md text-gray-700">Rs.{tax.toFixed(2)}</p>
-            </div>
+            </div> */}
             <div className="flex justify-between">
               <p className="text-md font-medium text-gray-700">Delivery Charge:</p>
               <p className="text-md text-gray-700">Rs.{deliveryCharge.toFixed(2)}</p>
@@ -171,7 +171,7 @@ const CartPage = () => {
             <hr className="h-2"></hr>
             <div className="flex justify-between">
               <p className="text-xl font-bold text-gray-700">Total:</p>
-              <p className="text-md text-gray-700">Rs.{total.toFixed(2)}</p>
+              <p className="text-md text-gray-700">Rs.{(total+deliveryCharge).toFixed(2)}</p>
             </div>
             <button
               className="bg-teal-500 text-white py-2 px-4 rounded-md mt-4 w-full"

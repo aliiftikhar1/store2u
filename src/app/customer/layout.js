@@ -6,6 +6,8 @@ import Header from './components/Header';
 import BrowseCategories from './components/BrowseCategories';
 import Footer from './components/Footer';
 import '../globals.css'; // Assuming you have global styles
+import WhatsAppButton from './components/whatsappbutton';
+
 
 const CustomerLayout = ({ children }) => {
   return (
@@ -21,6 +23,7 @@ const CustomerLayout = ({ children }) => {
           <TopBar />
           <Header />
           <main className="flex-grow">
+          <WhatsAppButton/>
             {/* <BrowseCategories /> */}
             {children}
           </main>

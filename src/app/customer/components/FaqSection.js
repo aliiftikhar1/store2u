@@ -55,7 +55,7 @@ const FaqSection = () => {
   return (
     <div className="container mx-auto py-8 flex">
       <div className="w-1/3">
-        <h2 className="text-6xl font-bold pt-10">Frequently Asked Questions</h2>
+        <h2 className="text-5xl font-bold text-gray-400 p-10">Frequently<br></br> Asked Questions</h2>
       </div>
       <div className="w-2/3 bg-white rounded-lg shadow-lg p-6">
         {faqs.map((faq, index) => (

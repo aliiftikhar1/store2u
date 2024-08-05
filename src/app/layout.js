@@ -1,6 +1,7 @@
 import { Poppins } from 'next/font/google';
 
 import './globals.css';
+import WhatsAppButton from './customer/components/whatsappbutton';
 
 const poppins = Poppins({
   weight: ['400', '700'],

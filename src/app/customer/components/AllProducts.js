@@ -8,6 +8,7 @@ import { ThreeDots } from 'react-loader-spinner';
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
+  const [visibleProducts, setVisibleProducts] = useState(14); // Show 2 rows (7 products each) initially
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -29,6 +30,10 @@ const AllProducts = () => {
     router.push(`/customer/pages/products/${id}`);
   };
 
+  const showMoreProducts = () => {
+    setVisibleProducts((prevVisibleProducts) => prevVisibleProducts + 14); // Load 2 more rows (7 products each)
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -46,12 +51,12 @@ const AllProducts = () => {
 
   return (
     <div className="container mx-auto py-8">
-      <h2 className="text-2xl font-bold mb-6">All Products</h2>
-      <div className="flex space-x-4 overflow-x-auto">
-        {products.map((product) => (
+      <h2 className="text-2xl font-bold mb-6">Top Ratted</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
+        {products.slice(0, visibleProducts).map((product) => (
           <div
             key={product.id}
-            className="bg-white shadow-md rounded-lg p-4 cursor-pointer w-48 h-72 flex-shrink-0 border border-gray-300"
+            className="bg-white shadow-md rounded-lg p-4 cursor-pointer border border-gray-300"
             onClick={() => handleProductClick(product.id)}
           >
             {product.images && product.images.length > 0 ? (
@@ -72,6 +77,16 @@ const AllProducts = () => {
           </div>
         ))}
       </div>
+      {visibleProducts < products.length && (
+        <div className="text-center mt-6">
+          <button
+            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors"
+            onClick={showMoreProducts}
+          >
+            Show More
+          </button>
+        </div>
+      )}
     </div>
   );
 };

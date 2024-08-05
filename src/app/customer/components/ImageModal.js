@@ -6,7 +6,7 @@ import { FiX } from 'react-icons/fi';
 
 const ImageModal = ({ imageUrl, onClose }) => {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
+    <div className="fixed inset-0  bg-black bg-opacity-75 flex justify-center items-center z-50">
       <div className="relative">
         <motion.img
           src={imageUrl}

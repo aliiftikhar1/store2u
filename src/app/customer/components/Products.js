@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight, FiPlus } from 'react-icons/fi';
 import { ThreeDots } from 'react-loader-spinner';
 
 const Products = () => {
@@ -39,23 +39,22 @@ const Products = () => {
     fetchCategoriesAndSubcategories();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <ThreeDots
-          height="80"
-          width="80"
-          radius="9"
-          color="#3498db"
-          ariaLabel="three-dots-loading"
-          visible={true}
-        />
-      </div>
-    );
-  }
-
   const handleProductClick = (id) => {
     router.push(`/customer/pages/products/${id}`);
+  };
+
+  const handleAddToCart = (product) => {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingProductIndex = cart.findIndex(item => item.id === product.id);
+
+    if (existingProductIndex >= 0) {
+      cart[existingProductIndex].quantity += 1;
+    } else {
+      cart.push({ ...product, quantity: 1 });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert(`${product.name} has been added to the cart.`);
   };
 
   const scrollLeft = (index) => {
@@ -76,6 +75,21 @@ const Products = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <ThreeDots
+          height="80"
+          width="80"
+          radius="9"
+          color="#3498db"
+          ariaLabel="three-dots-loading"
+          visible={true}
+        />
+      </div>
+    );
+  }
+
   return (
     <section className="py-8 bg-white">
       <div className="container mx-auto">
@@ -93,7 +107,7 @@ const Products = () => {
             <div key={category.id} className="mb-12">
               <div className="flex md:flex-row flex-col">
                 <div className="md:w-1/4 w-full pr-4">
-                <h3 className="text-xl text-gray-800 font-normal mt-4">{category.name}</h3>
+                  <h3 className="text-xl text-gray-800 font-normal mt-4">{category.name}</h3>
                   {category.imageUrl ? (
                     <img
                       src={`https://data.tascpa.ca/uploads/${category.imageUrl}`}
@@ -105,7 +119,6 @@ const Products = () => {
                       No Image
                     </div>
                   )}
-                  
                   <p className="text-gray-500 mt-2">{category.description}</p>
                 </div>
                 <div className="md:w-3/4 w-full relative">
@@ -119,7 +132,6 @@ const Products = () => {
                         <div
                           key={product.id}
                           className="bg-white shadow-md rounded-lg p-4 relative cursor-pointer w-48 sm:w-1/2 md:w-60 h-72 flex-shrink-0 border border-gray-300"
-                          onClick={() => handleProductClick(product.id)}
                         >
                           {product.images && product.images.length > 0 ? (
                             <motion.img
@@ -128,6 +140,7 @@ const Products = () => {
                               className="h-40 w-full object-cover mb-4 rounded"
                               whileHover={{ scale: 1.1 }}
                               transition={{ duration: 0.3 }}
+                              onClick={() => handleProductClick(product.id)}
                             />
                           ) : (
                             <div className="h-32 w-full bg-gray-200 mb-4 rounded flex items-center justify-center text-gray-500">
@@ -139,8 +152,13 @@ const Products = () => {
                               <h3 className="text-sm mb-2 overflow-hidden text-ellipsis whitespace-nowrap">{product.name}</h3>
                               <p className="text-lg font-medium text-gray-700 mb-1">Rs.{product.price}</p>
                             </div>
-                            <div>
-                              <p className="text-md font-medium text-right text-gray-500 mb-1">QTY: {product.stock}</p>
+                            <div className="flex justify-end items-center">
+                              <button
+                                className="border border-gray-300 text-gray-700 hover:text-blue-500 hover:border-blue-500 transition-colors duration-300 rounded-full p-2"
+                                onClick={() => handleAddToCart(product)}
+                              >
+                                <FiPlus className="h-5 w-5" />
+                              </button>
                             </div>
                           </div>
                         </div>
