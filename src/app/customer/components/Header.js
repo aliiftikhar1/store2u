@@ -79,7 +79,9 @@ const Header = () => {
     <header className="bg-white py-4 sticky top-0 z-50 shadow-md">
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center">
-          <img src="/store2ulogo.png" alt="Logo" className="h-10 w-full mr-6 ml-2" />
+          <Link href="/">
+            <img src="/store2ulogo.png" alt="Logo" className="h-10 w-full mr-6 ml-2 cursor-pointer" />
+          </Link>
         </div>
         <div className="lg:hidden">
           <button

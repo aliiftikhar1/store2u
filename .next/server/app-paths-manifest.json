@@ -1,7 +1,8 @@
 {
   "/page": "app/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/api/subcategories/route": "app/api/subcategories/route.js",
   "/api/categories/route": "app/api/categories/route.js",
-  "/api/products/route": "app/api/products/route.js"
+  "/api/subcategories/route": "app/api/subcategories/route.js",
+  "/customer/pages/faq/page": "app/customer/pages/faq/page.js",
+  "/customer/pages/category/[id]/page": "app/customer/pages/category/[id]/page.js",
+  "/customer/pages/products/[id]/page": "app/customer/pages/products/[id]/page.js"
 }

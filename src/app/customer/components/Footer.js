@@ -13,7 +13,7 @@ const Footer = () => {
         <div className="flex flex-col gap-2 col-span-4">
           <Link href="/" legacyBehavior>
             <a className="focus:outline-none">
-              <img src="/store2ulogo.png" className="cursor-pointer w-[100px] " alt="Store2u Logo" />
+              <img src="/store2ulogo.png" className="cursor-pointer w-[300px] h-[100px] " alt="Store2u Logo" />
             </a>
           </Link>
           <p className="text-[15px] font-[400] md:mr-10 sm:mr-10 lg:mr-10 xl:mr-10 text-justify">
@@ -70,9 +70,9 @@ const Footer = () => {
               <p className="text-[15px] font-[400]">New Arrivals</p>
             </a>
           </Link>
-          <Link href="/best-sellers" legacyBehavior>
+          <Link href="/customer/pages/faq" legacyBehavior>
             <a className="hover:no-underline">
-              <p className="text-[15px] font-[400]">Best Sellers</p>
+              <p className="text-[15px] font-[400]">FAQs</p>
             </a>
           </Link>
           <Link href="/categories" legacyBehavior>

@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { ThreeDots } from 'react-loader-spinner';
 
 const fetchSubcategoriesByCategoryId = async (categoryId) => {
   try {
@@ -35,6 +37,7 @@ const CategoryPage = () => {
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000000 });
   const [highestPrice, setHighestPrice] = useState(0);
+  const productRefs = useRef([]);
 
   useEffect(() => {
     const fetchCategoryData = async () => {
@@ -106,8 +109,37 @@ const CategoryPage = () => {
     router.push(`/customer/pages/products/${productId}`);
   };
 
+  const scrollLeft = (index) => {
+    if (productRefs.current[index]) {
+      productRefs.current[index].scrollBy({
+        left: -300,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const scrollRight = (index) => {
+    if (productRefs.current[index]) {
+      productRefs.current[index].scrollBy({
+        left: 300,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   if (!category) {
-    return <div className="text-center py-8">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <ThreeDots
+          height="80"
+          width="80"
+          radius="9"
+          color="#3498db"
+          ariaLabel="three-dots-loading"
+          visible={true}
+        />
+      </div>
+    );
   }
 
   return (
@@ -156,32 +188,52 @@ const CategoryPage = () => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {filteredProducts.map((product) => (
-          <div
-            key={product.id}
-            className="bg-white shadow-md rounded-lg p-4 relative cursor-pointer h-80 flex flex-col justify-between"
-            onClick={() => handleProductClick(product.id)}
-          >
-            {product.images && product.images.length > 0 ? (
-              <motion.img
-                src={getImageUrl(product.images[0].url)}
-                alt={product.name}
-                className="h-48 w-full object-cover mb-4 rounded"
-                whileHover={{ scale: 1.1 }}
-                transition={{ duration: 0.3 }}
-                onError={(e) => { e.target.onerror = null; e.target.src = '/default-image.png'; }} // Fallback image
-              />
-            ) : (
-              <div className="h-48 w-full bg-gray-200 mb-4 rounded flex items-center justify-center text-gray-500">
-                No Image
+      <div className="relative">
+        <FiChevronLeft
+          className="h-6 w-6 text-gray-500 cursor-pointer absolute left-0 top-1/2 transform -translate-y-1/2 z-10"
+          onClick={() => scrollLeft(0)}
+        />
+        <div ref={el => (productRefs.current[0] = el)} className="flex space-x-4 overflow-x-hidden pl-8 pr-8">
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => (
+              <div
+                key={product.id}
+                className="bg-white shadow-md rounded-lg p-4 relative cursor-pointer w-60 h-72 flex-shrink-0 border border-gray-300"
+                onClick={() => handleProductClick(product.id)}
+              >
+                {product.images && product.images.length > 0 ? (
+                  <motion.img
+                    src={getImageUrl(product.images[0].url)}
+                    alt={product.name}
+                    className="h-40 w-full object-cover mb-4 rounded"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.3 }}
+                    onError={(e) => { e.target.onerror = null; e.target.src = '/default-image.png'; }} // Fallback image
+                  />
+                ) : (
+                  <div className="h-32 w-full bg-gray-200 mb-4 rounded flex items-center justify-center text-gray-500">
+                    No Image
+                  </div>
+                )}
+                <div className="grid grid-cols-2">
+                  <div>
+                    <h3 className="text-sm mb-2 overflow-hidden text-ellipsis whitespace-nowrap">{product.name}</h3>
+                    <p className="text-lg font-medium text-gray-700 mb-1">Rs.{product.price}</p>
+                  </div>
+                  <div>
+                    <p className="text-md font-medium text-right text-gray-500 mb-1">QTY: {product.stock}</p>
+                  </div>
+                </div>
               </div>
-            )}
-            <h3 className="text-xl font-semibold mb-2 overflow-hidden text-ellipsis whitespace-nowrap">{product.name}</h3>
-            <p className="text-lg font-medium text-gray-700 mb-1">Rs.{product.price}</p>
-            <p className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">{product.description}</p>
-          </div>
-        ))}
+            ))
+          ) : (
+            <div className="text-center col-span-full py-8 text-gray-500">No products available in this category.</div>
+          )}
+        </div>
+        <FiChevronRight
+          className="h-6 w-6 text-gray-500 cursor-pointer absolute right-0 top-1/2 transform -translate-y-1/2 z-10"
+          onClick={() => scrollRight(0)}
+        />
       </div>
     </div>
   );

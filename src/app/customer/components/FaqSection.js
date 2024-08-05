@@ -53,25 +53,30 @@ const FaqSection = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
-      {faqs.map((faq, index) => (
-        <div key={index} className={`p-4 border-b ${activeIndex === index ? 'bg-gray-100' : ''}`}>
-          <div 
-            className="flex items-center cursor-pointer justify-between" 
-            onClick={() => toggleFAQ(index)}
-          >
-            {activeIndex === index ? (
-              <FiChevronUp className="text-gray-600 mr-4" />
-            ) : (
-              <FiChevronDown className="text-gray-600 mr-4" />
-            )}
-            <span className="text-lg font-medium text-gray-800 flex-1">{faq.question}</span>
+    <div className="container mx-auto py-8 flex">
+      <div className="w-1/3">
+        <h2 className="text-6xl font-bold pt-10">Frequently Asked Questions</h2>
+      </div>
+      <div className="w-2/3 bg-white rounded-lg shadow-lg p-6">
+        {faqs.map((faq, index) => (
+          <div key={index} className={`p-4 border-b ${activeIndex === index ? 'bg-gray-100' : ''}`}>
+            <div 
+              className="flex items-center cursor-pointer justify-between" 
+              onClick={() => toggleFAQ(index)}
+            >
+              <span className="text-lg font-medium text-gray-800 flex-1">{faq.question}</span>
+              {activeIndex === index ? (
+                <FiChevronUp className="text-gray-600 ml-4" />
+              ) : (
+                <FiChevronDown className="text-gray-600 ml-4" />
+              )}
+            </div>
+            <div className={`overflow-hidden transition-all duration-500 ${activeIndex === index ? 'max-h-screen' : 'max-h-0'}`}>
+              <p className="mt-4 text-gray-700">{faq.answer}</p>
+            </div>
           </div>
-          <div className={`overflow-hidden transition-all duration-500 ${activeIndex === index ? 'max-h-screen' : 'max-h-0'}`}>
-            <p className="mt-4 text-gray-700">{faq.answer}</p>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

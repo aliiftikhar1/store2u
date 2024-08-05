@@ -7,6 +7,8 @@ import Features from './customer/components/Features';
 import Slider from './customer/components/Carousel';
 import CategoryProductsComponent from './customer/components/CategoryProductsComponent';
 import Customerlayout from './customer/layout';
+import FaqSection from './customer/components/FaqSection';
+import AllProducts from './customer/components/AllProducts';
 
 
 export default function CustomerPage () {
@@ -22,13 +24,15 @@ export default function CustomerPage () {
       <Slider/>
      
       <main className="p-4">
+        <AllProducts/>
        
         
         
-        <TopCategories/>
+        {/* <TopCategories/> */}
         <Products/>
         <Features/>
         <CategoryProductsComponent/>
+        <FaqSection/>
         
       </main>
     </div>

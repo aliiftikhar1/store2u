@@ -6,7 +6,7 @@ import 'react-slideshow-image/dist/styles.css';
 const slides = [
   {
     image: '/s1.jpg',
-    title: 'Welcome to Our E-commerce Store',
+    title: 'Welcome to Our Store2u Store',
     description: 'Discover a variety of products at unbeatable prices. Shop now and enjoy a seamless online shopping experience with us!'
   },
   {

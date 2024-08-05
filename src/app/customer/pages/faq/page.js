@@ -1,7 +1,8 @@
 // pages/faq.js
 import React from 'react';
 import Head from 'next/head';
-import FaqSection from '../components/FaqSection';
+import FaqSection from '../../components/FaqSection';
+// import FaqSection from './components/FaqSection';
 
 const FAQ = () => {
   return (

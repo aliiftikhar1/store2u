@@ -15,7 +15,6 @@ const Products = () => {
   const productRefs = useRef([]);
   const router = useRouter();
 
-  // Fetch categories, subcategories, and products on component mount
   useEffect(() => {
     const fetchCategoriesAndSubcategories = async () => {
       try {
@@ -81,15 +80,11 @@ const Products = () => {
     <section className="py-8 bg-white">
       <div className="container mx-auto">
         {categories.map((category, index) => {
-          // Find subcategories for the current category
           const categorySubcategories = subcategories.filter(subcat => subcat.categoryId === category.id);
-
-          // Filter products that belong to these subcategories
           const categoryProducts = products.filter(product =>
             categorySubcategories.some(subcat => subcat.id === product.subcategoryId)
           );
 
-          // Initialize the ref for this category if not already done
           if (!productRefs.current[index]) {
             productRefs.current[index] = React.createRef();
           }
@@ -98,6 +93,7 @@ const Products = () => {
             <div key={category.id} className="mb-12">
               <div className="flex md:flex-row flex-col">
                 <div className="md:w-1/4 w-full pr-4">
+                <h3 className="text-xl text-gray-800 font-normal mt-4">{category.name}</h3>
                   {category.imageUrl ? (
                     <img
                       src={`https://data.tascpa.ca/uploads/${category.imageUrl}`}
@@ -109,10 +105,10 @@ const Products = () => {
                       No Image
                     </div>
                   )}
-                  <h3 className="text-xl text-gray-800 font-normal mt-4">{category.name}</h3>
+                  
                   <p className="text-gray-500 mt-2">{category.description}</p>
                 </div>
-                <div className="md:w-3/4 w-1/2 relative">
+                <div className="md:w-3/4 w-full relative">
                   <FiChevronLeft
                     className="h-6 w-6 text-gray-500 cursor-pointer absolute left-0 top-1/2 transform -translate-y-1/2 z-10"
                     onClick={() => scrollLeft(index)}
@@ -122,9 +118,7 @@ const Products = () => {
                       categoryProducts.map((product) => (
                         <div
                           key={product.id}
-                          className="bg-white
-                          
-                          shadow-md rounded-lg p-4 relative cursor-pointer w-60 h-72 flex-shrink-0 border border-gray-300"
+                          className="bg-white shadow-md rounded-lg p-4 relative cursor-pointer w-48 sm:w-1/2 md:w-60 h-72 flex-shrink-0 border border-gray-300"
                           onClick={() => handleProductClick(product.id)}
                         >
                           {product.images && product.images.length > 0 ? (
@@ -140,19 +134,16 @@ const Products = () => {
                               No Image
                             </div>
                           )}
-                          <div className=" grid grid-cols-2 ">
+                          <div className="grid grid-cols-2">
                             <div>
-                          <h3 className="text-sm mb-2 overflow-hidden text-ellipsis whitespace-nowrap">{product.name}</h3>
-                          <p className="text-lg font-medium text-gray-700 mb-1">Rs.{product.price}</p>
+                              <h3 className="text-sm mb-2 overflow-hidden text-ellipsis whitespace-nowrap">{product.name}</h3>
+                              <p className="text-lg font-medium text-gray-700 mb-1">Rs.{product.price}</p>
+                            </div>
+                            <div>
+                              <p className="text-md font-medium text-right text-gray-500 mb-1">QTY: {product.stock}</p>
+                            </div>
                           </div>
-                          <div>
-                          <p className="text-md font-medium text-right text-gray-500 mb-1">QTY: {product.stock}</p>
-                          </div>
-                          
-                          </div>
-                          
                         </div>
-                        
                       ))
                     ) : (
                       <div className="text-center col-span-full py-8 text-gray-500">No products available in this category.</div>
