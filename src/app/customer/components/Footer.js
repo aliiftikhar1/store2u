@@ -22,7 +22,7 @@ const Footer = () => {
         </div>
         <div className="flex flex-col gap-2 col-span-2">
           <p className="text-[20px] font-[600]">Company</p>
-          <Link href="/about" legacyBehavior>
+          <Link href="/customer/pages/aboutus" legacyBehavior>
             <a className="hover:no-underline">
               <p className="text-[15px] font-[400]">About Us</p>
             </a>
@@ -47,7 +47,7 @@ const Footer = () => {
               <p className="text-[15px] font-[400]">Return & Exchange Policy</p>
             </a>
           </Link>
-          <Link href="/contact" legacyBehavior>
+          <Link href="/customer/pages/contactus" legacyBehavior>
             <a className="hover:no-underline">
               <p className="text-[15px] font-[400]">Contact Us</p>
             </a>
