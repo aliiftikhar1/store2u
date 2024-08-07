@@ -51,15 +51,15 @@ export default function WhatsAppButton() {
         <FaWhatsapp className="text-white w-8 h-8 md:w-12 md:h-12" />
       </div>
 
-      <button
+      <div
         onClick={() => setCartVisible(true)}
-        className="fixed bottom-24 right-6 bg-teal-500 text-white p-4 rounded-full shadow-lg z-50"
+        className="fixed bottom-24 right-4 shadow-lg cursor-pointer flex items-center justify-center bg-orange-400 p-3 rounded-full z-50"
       >
-        <FiShoppingCart className="h-8 w-8" />
+        <FiShoppingCart className="text-white w-8 h-8 md:w-12 md:h-12 p-1" />
         {cart.length > 0 && (
           <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{cart.length}</span>
         )}
-      </button>
+      </div>
 
       {cartVisible && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-end z-50">
