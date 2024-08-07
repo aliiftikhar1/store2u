@@ -4,8 +4,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight, FiPlus } from 'react-icons/fi';
 import { ThreeDots } from 'react-loader-spinner';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '@/app/store/cartSlice';
+// import { addToCart } from '../../store/cartSlice';
 
 const fetchSubcategoriesByCategoryId = async (categoryId) => {
   try {
@@ -30,6 +33,7 @@ const fetchProductsBySubcategoryIds = async (subcategoryIds) => {
 const CategoryPage = () => {
   const { id } = useParams();
   const router = useRouter();
+  const dispatch = useDispatch();
   const [category, setCategory] = useState(null);
   const [subcategories, setSubcategories] = useState([]);
   const [products, setProducts] = useState([]);
@@ -107,6 +111,11 @@ const CategoryPage = () => {
 
   const handleProductClick = (productId) => {
     router.push(`/customer/pages/products/${productId}`);
+  };
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+    alert(`${product.name} has been added to the cart.`);
   };
 
   const scrollLeft = (index) => {
@@ -224,6 +233,15 @@ const CategoryPage = () => {
                     <p className="text-md font-medium text-right text-gray-500 mb-1">QTY: {product.stock}</p>
                   </div>
                 </div>
+                <button
+                  className="absolute bottom-4 right-4 border border-gray-300 text-gray-700 hover:text-blue-500 hover:border-blue-500 transition-colors duration-300 rounded-full p-2 bg-white shadow-lg"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddToCart(product);
+                  }}
+                >
+                  <FiPlus className="h-5 w-5" />
+                </button>
               </div>
             ))
           ) : (

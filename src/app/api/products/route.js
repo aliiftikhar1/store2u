@@ -4,7 +4,18 @@ import prisma from '../../util/prisma';
 export async function POST(request) {
   try {
     const data = await request.json();
-    const { name, description, price, stock, subcategoryId, colors, sizes, images } = data;
+    const {
+      name,
+      description,
+      price,
+      stock,
+      subcategoryId,
+      colors,
+      sizes,
+      images,
+      discount,
+      isTopRated
+    } = data;
 
     if (!images || images.length === 0) {
       throw new Error('No images provided');
@@ -19,6 +30,8 @@ export async function POST(request) {
         subcategoryId: parseInt(subcategoryId),
         colors: JSON.stringify(colors),
         sizes: JSON.stringify(sizes),
+        discount: discount ? parseFloat(discount) : null,
+        isTopRated: isTopRated || false,
         createdAt: new Date(),
         updatedAt: new Date(),
         images: {

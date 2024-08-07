@@ -1,32 +1,28 @@
-'use client'
+'use client';
 import React, { useEffect, useState } from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { FiShoppingCart, FiX, FiMinus, FiPlus, FiTrash2 } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeFromCart, updateQuantity, setCart } from '@/app/store/cartSlice';
 
 export default function WhatsAppButton() {
   const phoneNumber = '923310356111'; // Replace with your phone number
-  const message = 'Hello, I would like to chat with you!';
   const router = useRouter();
-  const [cart, setCart] = useState([]);
-  const [total, setTotal] = useState(0);
+  const dispatch = useDispatch();
+  const cart = useSelector(state => state.cart.items);
+  const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const [cartVisible, setCartVisible] = useState(false);
 
   const handleClick = () => {
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/${phoneNumber}?text=Hello%20swabi%20laundry`;
     window.open(url, '_blank');
   };
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
-    setCart(storedCart);
-    calculateTotal(storedCart);
-  }, []);
-
-  const calculateTotal = (cartItems) => {
-    const totalAmount = cartItems.reduce((acc, item) => acc + item.price * (item.quantity || 1), 0);
-    setTotal(totalAmount);
-  };
+    dispatch(setCart(storedCart));
+  }, [dispatch]);
 
   const updateItemQuantity = (itemId, quantity) => {
     let storedCart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -35,8 +31,7 @@ export default function WhatsAppButton() {
     if (item) {
       item.quantity = quantity;
       localStorage.setItem('cart', JSON.stringify(storedCart));
-      setCart(storedCart);
-      calculateTotal(storedCart);
+      dispatch(updateQuantity({ id: itemId, quantity }));
     }
   };
 
@@ -44,8 +39,7 @@ export default function WhatsAppButton() {
     let storedCart = JSON.parse(localStorage.getItem('cart')) || [];
     storedCart = storedCart.filter(item => item.id !== itemId);
     localStorage.setItem('cart', JSON.stringify(storedCart));
-    setCart(storedCart);
-    calculateTotal(storedCart);
+    dispatch(removeFromCart({ id: itemId }));
     alert(`Product removed from cart!`);
   };
 

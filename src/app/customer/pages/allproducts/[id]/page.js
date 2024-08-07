@@ -7,12 +7,15 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { FiPlus } from 'react-icons/fi';
 import { ThreeDots } from 'react-loader-spinner';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '@/app/store/cartSlice';
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
   const query = searchParams.get('search') || '';
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -30,16 +33,7 @@ const AllProducts = () => {
   }, [query]);
 
   const handleAddToCart = (product) => {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const existingProductIndex = cart.findIndex(item => item.id === product.id);
-
-    if (existingProductIndex >= 0) {
-      cart[existingProductIndex].quantity += 1;
-    } else {
-      cart.push({ ...product, quantity: 1 });
-    }
-
-    localStorage.setItem('cart', JSON.stringify(cart));
+    dispatch(addToCart(product));
     alert(`${product.name} has been added to the cart.`);
   };
 

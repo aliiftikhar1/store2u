@@ -20,6 +20,8 @@ const AddProductPageContent = () => {
     sizes: [],
     image: null,
     imageUrl: '',
+    discount: '',
+    isTopRated: false,
   });
 
   const [categories, setCategories] = useState([]);
@@ -136,6 +138,8 @@ const AddProductPageContent = () => {
         colors: JSON.stringify(newProduct.colors.map(color => color.value)),
         sizes: JSON.stringify(newProduct.sizes.map(size => size.value)),
         images: uploadedImages,
+        discount: newProduct.discount ? parseFloat(newProduct.discount) : null,
+        isTopRated: newProduct.isTopRated,
       };
 
       console.log('Sending product data to server:', productToSubmit);
@@ -194,6 +198,8 @@ const AddProductPageContent = () => {
         colors: JSON.stringify(newProduct.colors.map(color => color.value)),
         sizes: JSON.stringify(newProduct.sizes.map(size => size.value)),
         images: [...existingImages, ...uploadedImages],
+        discount: newProduct.discount ? parseFloat(newProduct.discount) : null,
+        isTopRated: newProduct.isTopRated,
       };
 
       console.log('Updating product with:', productToSubmit);
@@ -317,6 +323,24 @@ const AddProductPageContent = () => {
                 type="number"
                 value={newProduct.stock}
                 onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
+                className="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">Discount</label>
+              <input
+                type="number"
+                value={newProduct.discount}
+                onChange={(e) => setNewProduct({ ...newProduct, discount: e.target.value })}
+                className="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">Top Rated</label>
+              <input
+                type="checkbox"
+                checked={newProduct.isTopRated}
+                onChange={(e) => setNewProduct({ ...newProduct, isTopRated: e.target.checked })}
                 className="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>

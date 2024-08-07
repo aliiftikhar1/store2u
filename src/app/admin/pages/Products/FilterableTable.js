@@ -23,7 +23,9 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
     subcategoryId: '',
     colorId: '',
     sizeId: '',
-    images: []
+    discount: '',
+    isTopRated: false,
+    images: [],
   });
   const [existingImages, setExistingImages] = useState([]);
   const fileInputRef = useRef(null);
@@ -42,7 +44,7 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
   useEffect(() => {
     if (subcategories.length) {
       setFilteredSubcategories(
-        subcategories.filter(subcat => subcat.categoryId === parseInt(selectedCategory))
+        subcategories.filter((subcat) => subcat.categoryId === parseInt(selectedCategory))
       );
     } else {
       setFilteredSubcategories([]);
@@ -79,14 +81,16 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
       subcategoryId: item.subcategoryId,
       colorId: item.colorId,
       sizeId: item.sizeId,
-      images: []
+      discount: item.discount || '',
+      isTopRated: item.isTopRated || false,
+      images: [],
     });
     setExistingImages(item.images || []);
   };
 
   const handleFormChange = (e) => {
-    const { name, value } = e.target;
-    setProductForm({ ...productForm, [name]: value });
+    const { name, value, type, checked } = e.target;
+    setProductForm({ ...productForm, [name]: type === 'checkbox' ? checked : value });
   };
 
   const convertToBase64 = (file) => {
@@ -122,7 +126,9 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
 
       const productData = {
         ...productForm,
-        images: [...existingImages.map(img => img.url), ...uploadedImages],
+        images: [...existingImages.map((img) => img.url), ...uploadedImages],
+        discount: productForm.discount ? parseFloat(productForm.discount) : null,
+        isTopRated: productForm.isTopRated,
       };
 
       const response = await fetch(`/api/products/${editProduct.id}`, {
@@ -144,6 +150,8 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
           subcategoryId: '',
           colorId: '',
           sizeId: '',
+          discount: '',
+          isTopRated: false,
           images: [],
         });
       } else {
@@ -165,7 +173,9 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
       subcategoryId: '',
       colorId: '',
       sizeId: '',
-      images: []
+      discount: '',
+      isTopRated: false,
+      images: [],
     });
   };
 
@@ -181,7 +191,7 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
   const handleRemoveImage = (index) => {
     setProductForm((prevForm) => ({
       ...prevForm,
-      images: prevForm.images.filter((_, i) => i !== index)
+      images: prevForm.images.filter((_, i) => i !== index),
     }));
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -228,46 +238,80 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Updated At</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Image
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Description
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Price
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Stock
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Updated At
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {Array.isArray(filteredData) && filteredData.map((item, index) => (
-                <tr key={item.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {item.images && item.images.length > 0 ? (
-                      <img src={`https://data.tascpa.ca/uploads/${item.images[0].url}`} alt={item.name} className="w-16 h-16 object-cover" />
-                    ) : 'N/A'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.id}</td>
-                  <td className="px-6 py-4 text-sm text-gray-500">{item.name}</td>
-                  <td className="px-6 py-4 text-sm text-gray-500" dangerouslySetInnerHTML={{ __html: item.description }}></td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.price}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.stock}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(item.updatedAt).toLocaleString()}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                    <button
-                      onClick={() => handleEditItem(item)}
-                      className="text-indigo-600 hover:text-indigo-900 transition duration-150 ease-in-out"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteItem(item.id)}
-                      className="text-red-600 hover:text-red-900 transition duration-150 ease-in-out"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {Array.isArray(filteredData) &&
+                filteredData.map((item, index) => (
+                  <tr key={item.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {item.images && item.images.length > 0 ? (
+                        <img
+                          src={`https://data.tascpa.ca/uploads/${item.images[0].url}`}
+                          alt={item.name}
+                          className="w-16 h-16 object-cover"
+                        />
+                      ) : (
+                        'N/A'
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {item.id}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-500">{item.name}</td>
+                    <td
+                      className="px-6 py-4 text-sm text-gray-500"
+                      dangerouslySetInnerHTML={{ __html: item.description }}
+                    ></td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {item.price}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {item.stock}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(item.updatedAt).toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                      <button
+                        onClick={() => handleEditItem(item)}
+                        className="text-indigo-600 hover:text-indigo-900 transition duration-150 ease-in-out"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteItem(item.id)}
+                        className="text-red-600 hover:text-red-900 transition duration-150 ease-in-out"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
@@ -316,6 +360,26 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
                 />
               </div>
               <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Discount</label>
+                <input
+                  type="number"
+                  name="discount"
+                  value={productForm.discount}
+                  onChange={handleFormChange}
+                  className="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Top Rated</label>
+                <input
+                  type="checkbox"
+                  name="isTopRated"
+                  checked={productForm.isTopRated}
+                  onChange={handleFormChange}
+                  className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Subcategory</label>
                 <select
                   name="subcategoryId"
@@ -324,8 +388,10 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
                   className="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Select Subcategory</option>
-                  {filteredSubcategories.map(subcat => (
-                    <option key={subcat.id} value={subcat.id}>{subcat.name}</option>
+                  {filteredSubcategories.map((subcat) => (
+                    <option key={subcat.id} value={subcat.id}>
+                      {subcat.name}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -338,8 +404,10 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
                   className="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Select Color</option>
-                  {colors.map(color => (
-                    <option key={color.id} value={color.id}>{color.name}</option>
+                  {colors.map((color) => (
+                    <option key={color.id} value={color.id}>
+                      {color.name}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -352,8 +420,10 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
                   className="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Select Size</option>
-                  {sizes.map(size => (
-                    <option key={size.id} value={size.id}>{size.name}</option>
+                  {sizes.map((size) => (
+                    <option key={size.id} value={size.id}>
+                      {size.name}
+                    </option>
                   ))}
                 </select>
               </div>

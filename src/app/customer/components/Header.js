@@ -1,21 +1,24 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { FiSearch, FiShoppingCart, FiMenu, FiX, FiMoreVertical } from 'react-icons/fi';
+import { FiSearch, FiShoppingCart, FiMenu, FiX, FiMoreVertical, FiLogOut } from 'react-icons/fi';
 import { MdExpandMore } from 'react-icons/md';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {jwtDecode} from 'jwt-decode';
+import { useSelector, useDispatch } from 'react-redux';
+import { setCart } from '@/app/store/cartSlice';
 
 const Header = () => {
   const [categories, setCategories] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [authToken, setAuthToken] = useState(null);
   const [userRole, setUserRole] = useState(null);
   const router = useRouter();
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -33,11 +36,6 @@ const Header = () => {
       }
     };
 
-    const fetchCartCount = () => {
-      const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-      setCartCount(cartItems.length);
-    };
-
     const token = sessionStorage.getItem('authToken');
     if (token) {
       const decodedToken = jwtDecode(token);
@@ -46,8 +44,9 @@ const Header = () => {
     }
 
     fetchCategories();
-    fetchCartCount();
-  }, []);
+    const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
+    dispatch(setCart(storedCart));
+  }, [dispatch]);
 
   const handleSearchChange = (e) => {
     const query = e.target.value;
@@ -163,14 +162,18 @@ const Header = () => {
                   <Link href="/customer/pages/cart" className="block px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center">
                     <FiShoppingCart className="mr-2" />
                     Cart
+                    {cartItems.length > 0 && (
+                      <span className="ml-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs font-bold">{cartItems.length}</span>
+                    )}
                   </Link>
                   {authToken ? (
                     <>
                       <Link href="/customer/pages/orders" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">My Orders</Link>
                       <button
                         onClick={handleSignOut}
-                        className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                        className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center"
                       >
+                        <FiLogOut className="mr-2" />
                         Sign out
                       </button>
                     </>
@@ -193,6 +196,9 @@ const Header = () => {
             </form>
             <Link href="/customer/pages/cart">
               <FiShoppingCart className="ml-4 text-gray-700 cursor-pointer hover:text-blue-500 transition-colors duration-300" />
+              {cartItems.length > 0 && (
+                <span className="ml-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs font-bold">{cartItems.length}</span>
+              )}
             </Link>
           </div>
           {authToken ? (
@@ -201,8 +207,9 @@ const Header = () => {
                 <Link href="/customer/pages/orders" className="text-gray-700 hover:text-blue-500 transition-colors duration-300">My Orders</Link>
                 <button
                   onClick={handleSignOut}
-                  className="text-gray-700 hover:text-blue-500 transition-colors duration-300"
+                  className="text-gray-700 hover:text-blue-500 transition-colors duration-300 flex items-center"
                 >
+                  <FiLogOut className="mr-2" />
                   Sign out
                 </button>
               </div>

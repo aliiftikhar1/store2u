@@ -6,6 +6,8 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import { FiChevronLeft, FiChevronRight, FiPlus } from 'react-icons/fi';
 import { ThreeDots } from 'react-loader-spinner';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../store/cartSlice';
 
 const Products = () => {
   const [categories, setCategories] = useState([]);
@@ -14,6 +16,7 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const productRefs = useRef([]);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchCategoriesAndSubcategories = async () => {
@@ -44,16 +47,7 @@ const Products = () => {
   };
 
   const handleAddToCart = (product) => {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const existingProductIndex = cart.findIndex(item => item.id === product.id);
-
-    if (existingProductIndex >= 0) {
-      cart[existingProductIndex].quantity += 1;
-    } else {
-      cart.push({ ...product, quantity: 1 });
-    }
-
-    localStorage.setItem('cart', JSON.stringify(cart));
+    dispatch(addToCart(product));
     alert(`${product.name} has been added to the cart.`);
   };
 

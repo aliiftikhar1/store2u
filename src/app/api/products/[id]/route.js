@@ -3,7 +3,18 @@ import prisma from '../../../util/prisma';
 export async function PUT(request, { params }) {
   try {
     const id = parseInt(params.id);
-    const { name, description, price, stock, subcategoryId, colors, sizes, images } = await request.json();
+    const {
+      name,
+      description,
+      price,
+      stock,
+      subcategoryId,
+      colors,
+      sizes,
+      images,
+      discount,
+      isTopRated
+    } = await request.json();
 
     // Update the product details
     const updatedProduct = await prisma.product.update({
@@ -14,8 +25,10 @@ export async function PUT(request, { params }) {
         price: parseFloat(price),
         stock: parseInt(stock),
         subcategoryId: subcategoryId ? parseInt(subcategoryId) : null,
-        colors: colors ? JSON.parse(colors) : null,
-        sizes: sizes ? JSON.parse(sizes) : null,
+        colors: colors ? JSON.stringify(colors) : null,
+        sizes: sizes ? JSON.stringify(sizes) : null,
+        discount: discount ? parseFloat(discount) : null,
+        isTopRated: isTopRated || false,
         updatedAt: new Date(),
       },
     });
@@ -38,7 +51,11 @@ export async function PUT(request, { params }) {
       });
     }
 
-    return NextResponse.json(updatedProduct);
+    return NextResponse.json({
+      status: 200,
+      message: 'Product updated successfully',
+      data: updatedProduct,
+    });
   } catch (error) {
     console.error('Error updating product:', error);
     return NextResponse.json(

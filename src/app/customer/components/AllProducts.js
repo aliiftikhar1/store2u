@@ -6,12 +6,15 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import { ThreeDots } from 'react-loader-spinner';
 import { FiPlus } from 'react-icons/fi';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../store/cartSlice';
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
   const [visibleProducts, setVisibleProducts] = useState(14); // Show 2 rows (7 products each) initially
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -32,16 +35,7 @@ const AllProducts = () => {
   };
 
   const handleAddToCart = (product) => {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const existingProductIndex = cart.findIndex(item => item.id === product.id);
-
-    if (existingProductIndex >= 0) {
-      cart[existingProductIndex].quantity += 1;
-    } else {
-      cart.push({ ...product, quantity: 1 });
-    }
-
-    localStorage.setItem('cart', JSON.stringify(cart));
+    dispatch(addToCart(product));
     alert(`${product.name} has been added to the cart.`);
   };
 
@@ -93,11 +87,11 @@ const AllProducts = () => {
             <h3 className="text-sm font-medium text-gray-800 overflow-hidden text-ellipsis whitespace-nowrap">{product.name}</h3>
             <p className="text-lg font-medium text-gray-700">Rs.{product.price}</p>
             <button
-                className="absolute bottom-4 right-4 border border-gray-300 text-gray-700 hover:text-blue-500 hover:border-blue-500 transition-colors duration-300 rounded-full p-2 bg-white shadow-lg"
-                onClick={() => handleAddToCart(product)}
-              >
-                <FiPlus className="h-5 w-5" />
-              </button>
+              className="absolute bottom-4 right-4 border border-gray-300 text-gray-700 hover:text-blue-500 hover:border-blue-500 transition-colors duration-300 rounded-full p-2 bg-white shadow-lg"
+              onClick={() => handleAddToCart(product)}
+            >
+              <FiPlus className="h-5 w-5" />
+            </button>
           </div>
         ))}
       </div>

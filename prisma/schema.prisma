@@ -57,6 +57,8 @@ model Product {
   id          Int          @id @default(autoincrement())
   name        String
   description String
+  discount    Float?
+  isTopRated  Boolean?
   price       Float
   stock       Int
   subcategoryId Int

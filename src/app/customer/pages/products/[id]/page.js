@@ -7,15 +7,17 @@ import { motion } from 'framer-motion';
 import { FiChevronLeft, FiChevronRight, FiPlusCircle } from 'react-icons/fi';
 import { ToastContainer, toast } from 'react-toastify';
 import ImageModal from '@/app/customer/components/ImageModal';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '@/app/store/cartSlice';
 
 const ProductPage = () => {
   const { id } = useParams();
   const router = useRouter();
+  const dispatch = useDispatch();
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
-  const [cart, setCart] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -28,25 +30,15 @@ const ProductPage = () => {
         console.error('Error fetching product:', error);
       }
     };
-  
+
     if (id) {
       fetchProduct();
     }
   }, [id]);
 
-  const addToCart = (product) => {
-    let updatedCart = [...cart];
-    const existingItem = updatedCart.find((item) => item.id === product.id);
-
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      updatedCart.push({ ...product, quantity: 1 });
-    }
-
-    setCart(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
-    // toast.success(`${product.name} added to cart!`);
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+    toast.success(`${product.name} added to cart!`);
   };
 
   const getImageUrl = (url) => {
@@ -66,11 +58,11 @@ const ProductPage = () => {
   };
 
   const handleImageClick = () => {
-    setIsModalOpen(true); // Open the modal when the image is clicked
+    setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false); // Close the modal
+    setIsModalOpen(false);
   };
 
   if (!product) {
@@ -90,7 +82,7 @@ const ProductPage = () => {
                   alt={product.name}
                   className="w-full h-[400px] object-cover mb-4 cursor-pointer"
                   transition={{ duration: 0.3 }}
-                  onClick={handleImageClick} // Add click handler
+                  onClick={handleImageClick}
                 />
                 <div className="absolute top-1/2 transform -translate-y-1/2 left-0">
                   <button className="bg-gray-800 text-white p-2 rounded-full" onClick={handlePreviousImage}>
@@ -120,7 +112,9 @@ const ProductPage = () => {
           </div>
           <p className="text-lg font-medium text-gray-700 mb-1">Available Quantity : {product.stock}</p>
           <div className="text-gray-500 mb-4" dangerouslySetInnerHTML={{ __html: product.description }}></div>
-          <button className="bg-teal-500 text-white py-2 px-4 rounded-md" onClick={() => addToCart(product)}>Add to cart</button>
+          <button className="bg-teal-500 text-white py-2 px-4 rounded-md" onClick={() => handleAddToCart(product)}>
+            Add to cart
+          </button>
         </div>
       </div>
 
@@ -150,19 +144,19 @@ const ProductPage = () => {
               <div className="absolute top-2 right-2">
                 <FiPlusCircle className="h-6 w-6 text-teal-500 cursor-pointer" onClick={(e) => {
                   e.stopPropagation();
-                  addToCart(relatedProduct);
+                  handleAddToCart(relatedProduct);
                 }} />
               </div>
-              <div className=' gri grid-cols-2'>
+              <div className="grid grid-cols-2">
                 <div>
-              <h3 className="text-xl mb-2 overflow-hidden text-ellipsis whitespace-nowrap">{relatedProduct.name}</h3>
-              <p className="text-lg font-medium text-gray-700 mb-1">Rs.{relatedProduct.price}</p>
+                  <h3 className="text-xl mb-2 overflow-hidden text-ellipsis whitespace-nowrap">{relatedProduct.name}</h3>
+                  <p className="text-lg font-medium text-gray-700 mb-1">Rs.{relatedProduct.price}</p>
+                </div>
+                <div>
+                  <p className="text-lg font-medium text-gray-700 mb-1">Quantity:{relatedProduct.stock}</p>
+                </div>
               </div>
-              <div>
-              <p className="text-lg font-medium text-gray-700 mb-1">Quantity:{relatedProduct.stock}</p>
-              </div>
-              </div>
-              <p className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap"dangerouslySetInnerHTML= {{__html:relatedProduct.description}}></p>
+              <p className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap" dangerouslySetInnerHTML={{ __html: relatedProduct.description }}></p>
             </div>
           ))}
         </div>
