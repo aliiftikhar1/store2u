@@ -126,6 +126,32 @@ export async function GET(request, { params }) {
   }
 }
 
+export async function DELETE(request, { params }) {
+  try {
+    const id = parseInt(params.id);
+
+    // First, delete related order items
+    await prisma.$executeRaw`DELETE FROM OrderItem WHERE productId = ${id}`;
+
+    // Then delete related images
+    await prisma.$executeRaw`DELETE FROM Image WHERE productId = ${id}`;
+
+    // Now delete the product
+    const deletedProduct = await prisma.$executeRaw`DELETE FROM Product WHERE id = ${id}`;
+
+    return NextResponse.json({ message: 'Product and related data deleted successfully', deletedProduct });
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    return NextResponse.json(
+      {
+        message: 'Failed to delete product',
+        status: false,
+        error: error.message,
+      },
+      { status: 500 }
+    );
+  }
+}
 
 
 // export const config = {

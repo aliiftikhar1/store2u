@@ -96,7 +96,7 @@ const ProductsPage = () => {
           </div> */}
           <FilterableTable
             products={products}
-            fetchProducts={() => fetchData(selectedCategory)}
+            fetchCategories={() => fetchData(selectedCategory)}
             categories={categories}
             subcategories={subcategories}
           />

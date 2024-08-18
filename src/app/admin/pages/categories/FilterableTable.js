@@ -25,6 +25,7 @@ const FilterableTable = ({ categories, fetchCategories }) => {
   }, [filter, categories]);
 
   const handleAddNewItem = async () => {
+    setIsModalOpen(false);
     setIsLoading(true);
     try {
       let imageUrl = newCategory.imageUrl;
@@ -42,6 +43,7 @@ const FilterableTable = ({ categories, fetchCategories }) => {
         const result = await response.json();
         if (response.ok) {
           imageUrl = result.image_url;
+          
         } else {
           throw new Error(result.error || 'Failed to upload image');
         }
@@ -74,14 +76,13 @@ const FilterableTable = ({ categories, fetchCategories }) => {
 
       const responseData = await response.json();
       console.log('Response from server:', responseData);
-
-      fetchCategories(); // Refresh the data after adding or updating
       setIsModalOpen(false);
       setNewCategory({ id: null, name: '', imageUrl: '' });
       setImage(null);
     } catch (error) {
       console.error('Error adding or updating item:', error);
     }
+    fetchCategories(); // Refresh the data after adding or updating
     setIsLoading(false);
   };
 

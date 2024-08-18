@@ -38,9 +38,18 @@ const ProductPage = () => {
       try {
         const response = await axios.get(`/api/products/${id}`);
         const { product, relatedProducts } = response.data.data;
-        console.log(response);
+
+        // Parse sizes and colors from JSON strings
+        const parsedSizes = JSON.parse(product.sizes || '[]');
+        const parsedColors = JSON.parse(product.colors || '[]');
+
         setProduct(product);
         setRelatedProducts(relatedProducts);
+
+        // Directly set the sizes and colors from the parsed data
+        setSizes(parsedSizes);
+        setColors(parsedColors);
+
         setLoading(false);
       } catch (error) {
         console.error('Error fetching product:', error);
@@ -48,23 +57,8 @@ const ProductPage = () => {
       }
     };
 
-    const fetchSizesAndColors = async () => {
-      try {
-        const [sizesResponse, colorsResponse] = await Promise.all([
-          axios.get('/api/sizes'),
-          axios.get('/api/colors')
-        ]);
-
-        setSizes(sizesResponse.data);
-        setColors(colorsResponse.data);
-      } catch (error) {
-        console.error('Error fetching sizes and colors:', error);
-      }
-    };
-
     if (id) {
       fetchProduct();
-      fetchSizesAndColors();
     }
   }, [id]);
 
@@ -147,23 +141,20 @@ const ProductPage = () => {
   };
 
   const RelatedProductsPopup = ({ relatedProducts, onClose }) => {
-    const router = useRouter();
-  
     const handleCardClick = (productId) => {
       router.push(`/customer/pages/products/${productId}`);
     };
-  
+
     const handleClose = () => {
       onClose();
       router.push('/');
     };
-  
+
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
         <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-5xl">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold text-green-600">✔ Added to cart successfully!</h2>
-            
             <button onClick={handleClose} className="text-gray-500">✕</button>
           </div>
           <h3 className="text-xl font-semibold mb-4">Products You May Be Interested In</h3>
@@ -172,7 +163,7 @@ const ProductPage = () => {
               const originalPrice = product.discount 
                 ? (product.price / (1 - product.discount / 100)).toFixed(2)
                 : product.price;
-  
+
               return (
                 <div
                   key={product.id}
@@ -180,7 +171,7 @@ const ProductPage = () => {
                   onClick={() => handleCardClick(product.id)}
                 >
                   <img
-                    src={`https://data.tascpa.ca/uploads/${product.images[0].url}`}
+                    src={getImageUrl(product.images[0].url)}
                     alt={product.name}
                     className="w-full h-56 object-cover rounded-lg"
                   />
@@ -275,12 +266,12 @@ const ProductPage = () => {
             )}
           </div>
 
-          {product.stock ===0 && (
-                <p className="text-6lg font-bold text-red-700 mb-1">Out Stock</p>
-              )}
-              {product.stock >0 && (
-                <p className="text-6lg font-bold text-red-700 mb-1">In Stock</p>
-              )}
+          {product.stock === 0 && (
+            <p className="text-lg font-bold text-red-700 mb-1">Out of Stock</p>
+          )}
+          {product.stock > 0 && (
+            <p className="text-lg font-bold text-green-700 mb-1">In Stock</p>
+          )}
           
           <div className="text-gray-500 mb-4" dangerouslySetInnerHTML={{ __html: product.description }}></div>
           <div className="mb-4">
@@ -289,44 +280,46 @@ const ProductPage = () => {
               {sizes.length > 0 && sizes.map((size, index) => (
                 <label 
                   key={index} 
-                  className={`mr-4 mb-2 text-gray-700 flex rounded items-center border-[1px] border-black px-2 ${selectedSize === size.name ? 'bg-gray-600 text-white' : 'hover:bg-gray-600 hover:text-white'}`}
-                  onClick={() => setSelectedSize(size.name)}
+                  className={`mr-4 mb-2 text-gray-700 flex rounded items-center border-[1px] border-black px-2 ${selectedSize === size.label ? 'bg-gray-600 text-white' : 'hover:bg-gray-600 hover:text-white'}`}
+                  onClick={() => setSelectedSize(size.label)}
                 >
                   <input
                     type="radio"
                     name="size"
                     className="mr-2"
-                    value={size.name}
-                    checked={selectedSize === size.name}
-                    onChange={() => setSelectedSize(size.name)}
+                    value={size.label}
+                    checked={selectedSize === size.label}
+                    onChange={() => setSelectedSize(size.label)}
                   />
-                  {size.name}
+                  {size.label}
                 </label>
               ))}
             </div>
           </div>
+
           <div className="mb-4">
             <h3 className="text-lg font-medium mb-2">Select Color</h3>
             <div className="flex flex-wrap">
               {colors.length > 0 && colors.map((color, index) => (
                 <label 
                   key={index} 
-                  className={`mr-4 mb-2 text-gray-700 flex items-center rounded border-[1px] border-black px-2 ${selectedColor === color.name ? 'bg-gray-600 text-white' : 'hover:bg-gray-600 hover:text-white'}`}
-                  onClick={() => setSelectedColor(color.name)}
+                  className={`mr-4 mb-2 text-gray-700 flex items-center rounded border-[1px] border-black px-2 ${selectedColor === color.label ? 'bg-gray-600 text-white' : 'hover:bg-gray-600 hover:text-white'}`}
+                  onClick={() => setSelectedColor(color.label)}
                 >
                   <input
                     type="radio"
                     name="color"
                     className="mr-2"
-                    value={color.name}
-                    checked={selectedColor === color.name}
-                    onChange={() => setSelectedColor(color.name)}
+                    value={color.label}
+                    checked={selectedColor === color.label}
+                    onChange={() => setSelectedColor(color.label)}
                   />
-                  {color.name}
+                  {color.label}
                 </label>
               ))}
             </div>
           </div>
+
           <div className="flex items-center mb-4">
             <button
               className="bg-gray-300 text-gray-700 px-2 py-1 rounded-l"
@@ -413,13 +406,8 @@ const ProductPage = () => {
       )}
 
       {/* Related Products Popup */}
-      
       {showRelatedPopup && (
-        
-
         <RelatedProductsPopup
-        
-        
           relatedProducts={relatedProducts}
           onClose={() => setShowRelatedPopup(false)}
         />
@@ -443,16 +431,6 @@ const ProductPage = () => {
                       -{relatedProduct.discount}%
                     </div>
                   )}
-                  {/* {product.stock ===0 && (
-                <div className="absolute z-40 top-4 left-1 bg-red-500 text-white  h-6 w-20 flex items-center justify-center">
-                  Out Stock
-                </div>
-              )}
-              {product.stock >0 && (
-                <div className="absolute z-40 top-4 left-0 bg-green-500 text-white  h-6  w-20 flex items-center justify-center">
-                  In Stock 
-                </div> */}
-              {/* )} */}
                   {relatedProduct.images && relatedProduct.images.length > 0 ? (
                     <motion.img
                       src={getImageUrl(relatedProduct.images[0].url)}

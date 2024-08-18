@@ -13,6 +13,8 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
   const [filteredData, setFilteredData] = useState(products);
   const [filteredSubcategories, setFilteredSubcategories] = useState([]);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [itemIdToDelete, setItemIdToDelete] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [editProduct, setEditProduct] = useState(null);
@@ -52,10 +54,15 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
     }
   }, [selectedCategory, subcategories]);
 
-  const handleDeleteItem = async (id) => {
+  const handleDeleteClick = (id) => {
+    setItemIdToDelete(id);
+    setIsPopupVisible(true);
+  };
+
+  const handleDeleteItem = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/products/${id}`, {
+      const response = await fetch(`/api/products/${itemIdToDelete}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -63,6 +70,7 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
       });
       if (response.ok) {
         fetchProducts(); // Refresh the data after deleting
+        setIsPopupVisible(false);
       } else {
         console.error('Failed to delete product');
       }
@@ -72,16 +80,31 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
     setIsLoading(false);
   };
 
+  const handleCancelDelete = () => {
+    setIsPopupVisible(false);
+    setItemIdToDelete(null);
+  };
+
   const handleEditItem = (item) => {
     setEditProduct(item);
+  
+    // Get the existing colors and sizes for this product
+    const existingColors = colors
+      .filter((color) => item.colors.includes(color.id))
+      .map((color) => ({ value: color.id, label: color.name }));
+  
+    const existingSizes = sizes
+      .filter((size) => item.sizes.includes(size.id))
+      .map((size) => ({ value: size.id, label: size.name }));
+  
     setProductForm({
       name: item.name,
       description: item.description,
       price: item.price,
       stock: item.stock,
       subcategoryId: item.subcategoryId,
-      colors: Array.isArray(item.colors) ? item.colors.map((color) => ({ value: color.id, label: color.name })) : [],
-      sizes: Array.isArray(item.sizes) ? item.sizes.map((size) => ({ value: size.id, label: size.name })) : [],
+      colors: existingColors, // Set existing colors
+      sizes: existingSizes, // Set existing sizes
       discount: item.discount || '',
       isTopRated: item.isTopRated || false,
       images: [],
@@ -201,6 +224,30 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
+      {isPopupVisible && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">Are you sure?</h2>
+            <p className="text-gray-600 mb-6">
+              If you delete this product, all orders related to this product will also be deleted. This action cannot be undone.
+            </p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={handleCancelDelete}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteItem}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none"
+              >
+                {isLoading ? 'Deleting...' : 'Yes, Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="text-white text-xl">Loading...</div>
@@ -305,7 +352,7 @@ const FilterableTable = ({ products = [], fetchProducts, categories = [], subcat
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDeleteItem(item.id)}
+                        onClick={() => handleDeleteClick(item.id)}
                         className="text-red-600 hover:text-red-900 transition duration-150 ease-in-out"
                       >
                         Delete
