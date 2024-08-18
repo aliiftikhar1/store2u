@@ -1,0 +1,8 @@
+{
+  "/api/categories/route": "app/api/categories/route.js",
+  "/page": "app/page.js",
+  "/api/slider/route": "app/api/slider/route.js",
+  "/api/products/topRated/route": "app/api/products/topRated/route.js",
+  "/api/products/newArrivals/route": "app/api/products/newArrivals/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js"
+}

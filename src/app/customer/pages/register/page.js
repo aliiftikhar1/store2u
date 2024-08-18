@@ -193,15 +193,7 @@ const Register = () => {
             required
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Profile Image</label>
-          <input
-            type="file"
-            name="image"
-            onChange={handleImageChange}
-            className="w-full px-4 py-2 border rounded-md"
-          />
-        </div>
+        
         <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-md">
           Register
         </button>
