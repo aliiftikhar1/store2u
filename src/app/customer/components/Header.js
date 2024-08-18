@@ -56,8 +56,6 @@ const Header = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     const searchPageUrl = `/customer/pages/allproducts?search=${encodeURIComponent(searchQuery.trim())}`;
-    
-    // Redirect to the search results page or update the query parameters
     router.push(searchPageUrl);
   };
 
@@ -81,12 +79,13 @@ const Header = () => {
 
   return (
     <header className="bg-white py-4 sticky top-0 z-50 shadow-md">
-      <div className="container mx-auto flex items-center justify-between">
-        <div className="flex items-center">
+      <div className="container mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center space-x-6 lg:space-x-8">
           <Link href="/">
-            <img src="/store2ulogo.png" alt="Logo" className="h-10 w-full mr-6 ml-2 cursor-pointer" />
+            <img src="/store2ulogo.png" alt="Logo" className="h-10 w-auto cursor-pointer" />
           </Link>
         </div>
+
         <div className="lg:hidden">
           <button
             className="text-gray-700 hover:text-blue-500 focus:outline-none"
@@ -95,14 +94,15 @@ const Header = () => {
             {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
           </button>
         </div>
+
         <nav className={`fixed inset-0 bg-white lg:relative lg:bg-transparent w-full lg:flex lg:w-auto lg:items-center ${isMobileMenuOpen ? 'block' : 'hidden'} lg:block`}>
-          <div className="container mx-auto lg:flex lg:items-center lg:justify-between">
-            <div className="flex flex-col lg:flex-row text-[15px] lg:mx-auto lg:w-[800px] text-center lg:pl-8 lg:space-x-8">
+          <div className="container mx-auto lg:flex lg:items-center lg:justify-between px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col lg:flex-row text-xs lg:text-[14px] text-center lg:space-x-6">
               {visibleCategories.map((category) => (
                 <Link
                   key={category.id}
                   href={`/customer/pages/category/${category.id}`}
-                  className="relative group text-gray-700 transition-colors duration-300 text-center my-2 lg:my-0"
+                  className="relative group text-gray-700 transition-colors duration-300 py-2 lg:py-0"
                 >
                   {category.name}
                   <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-blue-500 transition-all duration-300 group-hover:w-full"></span>
@@ -112,7 +112,7 @@ const Header = () => {
                 <div className="relative">
                   <button
                     onClick={toggleDropdown}
-                    className="flex items-center text-gray-700 hover:text-blue-500 transition-colors duration-300 text-center my-2 lg:my-0"
+                    className="flex items-center text-gray-700 hover:text-blue-500 transition-colors duration-300 py-2 lg:py-0"
                   >
                     More <MdExpandMore />
                   </button>
@@ -144,8 +144,33 @@ const Header = () => {
             )}
           </div>
         </nav>
-        <div className="flex items-center space-x-4 mt-4 lg:mt-0">
-          <div className="lg:hidden">
+
+        <div className="flex items-center space-x-4 lg:space-x-4 mt-4 lg:mt-0">
+        <div className="hidden lg:flex items-center space-x-4 lg:space-x-3">
+  <form className="relative flex" onSubmit={handleSearchSubmit}>
+    <input
+      type="text"
+      value={searchQuery}
+      onChange={handleSearchChange}
+      placeholder="Search Items"
+      className="border rounded-full py-1 px-3 text-[14px]  w-48 text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+    <button type="submit" className="absolute right-2 top-2 text-gray-700 hover:text-blue-500">
+      <FaSearch />
+    </button>
+  </form>
+  <div className="relative flex">
+    <Link href="/customer/pages/cart">
+      <FiShoppingCart className="text-gray-700 cursor-pointer hover:text-blue-500 transition-colors duration-300" />
+      {cartItems.length > 0 && (
+        <span className="absolute top-[-10px] right-[-10px] bg-red-500 text-white rounded-full px-2 py-1 text-xs font-bold">{cartItems.length}</span>
+      )}
+    </Link>
+  </div>
+</div>
+
+
+          <div className="lg:hidden flex items-center">
             <button
               className="text-gray-700 hover:text-blue-500 focus:outline-none"
               onClick={toggleDropdown}
@@ -161,7 +186,7 @@ const Header = () => {
                       value={searchQuery}
                       onChange={handleSearchChange}
                       placeholder="Search"
-                      className="border rounded-full py-1 pl-4 pr-10 text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="border rounded-full  py-1 pl-4 pr-10 text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <button type="submit" className="absolute right-3 top-1 text-gray-700 hover:text-blue-500">
                       <FaSearch />
@@ -176,50 +201,29 @@ const Header = () => {
                   </Link>
                   {authToken ? (
                     <>
-                      <Link href="/customer/pages/orders" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">My Orders</Link>
+                      <Link href="/customer/pages/orders" className="block text-gray-700 hover:bg-gray-100">My Orders</Link>
                       <button
                         onClick={handleSignOut}
-                        className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center"
+                        className="block w-full text-left  text-gray-700 hover:bg-gray-100 flex items-center"
                       >
                         <FiLogOut className="mr-2" />
                         Sign out
                       </button>
                     </>
                   ) : (
-                    <Link href="/customer/pages/login" className="block px-4 text-lg py-2 text-gray-700 hover:bg-gray-100">Sign in</Link>
+                    <Link href="/customer/pages/login" className="block  text-gray-700 hover:bg-gray-100">Sign in</Link>
                   )}
                 </div>
               </div>
             )}
           </div>
-          <div className="hidden lg:flex items-center">
-            <form className="relative w-full flex justify-center items-center" onSubmit={handleSearchSubmit}>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={handleSearchChange}
-                placeholder="What are you looking for"
-                className="border rounded-full py-1 pl-4 pr-10 text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button type="submit" className="absolute right-3 text-gray-700 hover:text-blue-500">
-                <FaSearch />
-              </button>
-            </form>
-            <div className='relative flex'>
-              <Link href="/customer/pages/cart">
-                <FiShoppingCart className="ml-4 text-gray-700 cursor-pointer hover:text-blue-500 transition-colors duration-300" />
-                {cartItems.length > 0 && (
-                  <span className=" absolute top-[-10px] right-[-10px] ml-2 bg-red-500 text-white rounded-full px-1 text-xs font-bold">{cartItems.length}</span>
-                )}
-              </Link>
-            </div>
-          </div>
+
           {authToken ? (
-            <div className="hidden lg:flex items-center space-x-4">
-              <Link href="/customer/pages/orders" className="text-gray-700 hover:text-blue-500 transition-colors duration-300">My Orders</Link>
+            <div className="hidden lg:flex items-center space-x-4 lg:space-x-6">
+              <Link href="/customer/pages/orders" className="text-gray-700 text-[14px] hover:text-blue-500 transition-colors duration-300">My Orders</Link>
               <button
                 onClick={handleSignOut}
-                className="text-gray-700 hover:text-blue-500 transition-colors duration-300 flex items-center"
+                className="text-gray-700 hover:text-blue-500 text-[14px]  transition-colors duration-300 flex items-center"
               >
                 <FiLogOut className="mr-2" />
                 Sign out

@@ -180,10 +180,10 @@ const UserOrders = () => {
                         <p className="text-md font-medium text-gray-700">Subtotal:</p>
                         <p className="text-xl text-gray-700">Rs.{subtotalLessDiscount.toFixed(2)}</p>
                       </div>
-                      <div className="flex justify-between">
+                      {/* <div className="flex justify-between">
                         <p className="text-md font-medium text-gray-700">Tax ({(taxRate * 100).toFixed(2)}%):</p>
                         <p className="text-md text-gray-700">Rs.{totalTax.toFixed(2)}</p>
-                      </div>
+                      </div> */}
                       <div className="flex justify-between">
                         <p className="text-md font-medium text-gray-700">Delivery Charges:</p>
                         <p className="text-md text-gray-700">Rs.{deliveryCharge.toFixed(2)}</p>
