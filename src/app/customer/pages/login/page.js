@@ -46,7 +46,9 @@ const LoginForm = () => {
       console.log("User name is: " + decodedToken.name);
       console.log("User role is: " + decodedToken.role);
       if (decodedToken.role === 'CUSTOMER') {
-        router.push('/customer/pages/checkout');
+        window.location.href = '/customer/pages/checkout';
+
+        // router.push('/customer/pages/checkout');
       } else if (decodedToken.role === 'ADMIN') {
         router.push('/admin/pages/Products');
       }
