@@ -1,9 +1,10 @@
 {
   "/page": "app/page.js",
-  "/api/login/route": "app/api/login/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/api/categories/route": "app/api/categories/route.js",
-  "/api/settings/getSettings/route": "app/api/settings/getSettings/route.js",
-  "/customer/pages/allproducts/page": "app/customer/pages/allproducts/page.js",
-  "/customer/pages/login/page": "app/customer/pages/login/page.js",
-  "/customer/pages/checkout/page": "app/customer/pages/checkout/page.js"
+  "/api/products/newArrivals/route": "app/api/products/newArrivals/route.js",
+  "/api/slider/route": "app/api/slider/route.js",
+  "/api/subcategories/route": "app/api/subcategories/route.js",
+  "/api/products/topRated/route": "app/api/products/topRated/route.js",
+  "/api/products/route": "app/api/products/route.js"
 }

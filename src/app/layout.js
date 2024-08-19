@@ -17,8 +17,10 @@ export default function RootLayout({ children }) {
     <Provider store={store}>
       <html lang="en">
         <body className={poppins.className}>
+          <div className='text-black'>
           {/* <WhatsAppButton /> Ensure WhatsAppButton is included in the layout */}
           {children}
+          </div>
         </body>
       </html>
     </Provider>
