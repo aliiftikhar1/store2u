@@ -66,7 +66,7 @@ export default function WhatsAppButton() {
       </div>
 
       {cartVisible && (
-        <div className="fixed inset-0 text-black bg-gray-900 bg-opacity-50 flex justify-end z-50">
+        <div className="fixed md:h-full h-[80vh] overflow-y-auto md:m-0 m-4  inset-0 text-black bg-gray-900 bg-opacity-50 flex justify-end z-50">
           <div className="bg-white w-full lg:w-1/3 h-full p-4 overflow-y-auto">
             <div className="flex justify-between mb-6">
               <h2 className="text-xl font-semibold">Your Cart</h2>

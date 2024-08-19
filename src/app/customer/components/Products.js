@@ -173,15 +173,15 @@ const Products = () => {
                                 {product.discount ? (
                                   <div className='flex flex-col'>
                                   <p className="text-md font-normal text-gray-700 line-through mr-2">
-                                    Rs.{product.price.toFixed(2)}
+                                    Rs.{product.price}
                                   </p>
                                   <p className="text-md font-normal text-red-700">
-                                    Rs.{originalPrice.toFixed(2)}
+                                    Rs.{originalPrice}
                                   </p>
                                 </div>
                                 ) : (
                                   <p className="text-md font-normal text-gray-700">
-                                    Rs.{product.price.toFixed(2)}
+                                    Rs.{product.price}
                                   </p>
                                 )}
                               </div>

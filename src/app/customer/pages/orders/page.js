@@ -120,7 +120,7 @@ const UserOrders = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(order.createdAt).toLocaleDateString()}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.status}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{productNames}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Rs.{total.toFixed(2)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Rs.{total}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <button
                           onClick={() => handleViewDetails(order)}
@@ -178,24 +178,24 @@ const UserOrders = () => {
                     <>
                       <div className="flex justify-between">
                         <p className="text-md font-medium text-gray-700">Subtotal:</p>
-                        <p className="text-xl text-gray-700">Rs.{subtotalLessDiscount.toFixed(2)}</p>
+                        <p className="text-xl text-gray-700">Rs.{subtotalLessDiscount}</p>
                       </div>
                       {/* <div className="flex justify-between">
-                        <p className="text-md font-medium text-gray-700">Tax ({(taxRate * 100).toFixed(2)}%):</p>
-                        <p className="text-md text-gray-700">Rs.{totalTax.toFixed(2)}</p>
+                        <p className="text-md font-medium text-gray-700">Tax ({(taxRate * 100)}%):</p>
+                        <p className="text-md text-gray-700">Rs.{totalTax}</p>
                       </div> */}
                       <div className="flex justify-between">
                         <p className="text-md font-medium text-gray-700">Delivery Charges:</p>
-                        <p className="text-md text-gray-700">Rs.{deliveryCharge.toFixed(2)}</p>
+                        <p className="text-md text-gray-700">Rs.{deliveryCharge}</p>
                       </div>
                       <div className="flex justify-between">
                         <p className="text-md font-medium text-gray-700">Other:</p>
-                        <p className="text-md text-gray-700">Rs.{(selectedOrder.otherCharges ?? 0).toFixed(2)}</p>
+                        <p className="text-md text-gray-700">Rs.{(selectedOrder.otherCharges ?? 0)}</p>
                       </div>
                       <hr className="my-2" />
                       <div className="flex justify-between mt-4">
                         <p className="text-xl font-bold text-gray-700">Total:</p>
-                        <p className="text-xl text-gray-700">Rs.{total.toFixed(2)}</p>
+                        <p className="text-xl text-gray-700">Rs.{total}</p>
                       </div>
                     </>
                   );

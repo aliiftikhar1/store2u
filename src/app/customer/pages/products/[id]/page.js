@@ -161,7 +161,7 @@ const ProductPage = () => {
           <div className="flex overflow-x-auto space-x-4">
             {relatedProducts.map((product) => {
               const originalPrice = product.discount 
-                ? (product.price / (1 - product.discount / 100)).toFixed(2)
+                ? (product.price / (1 - product.discount / 100))
                 : product.price;
 
               return (
@@ -451,15 +451,15 @@ const ProductPage = () => {
                         {relatedProduct.discount ? (
                           <div className='flex flex-col'>
                             <p className="text-md font-normal text-gray-700 line-through mr-2">
-                              Rs.{relatedProduct.price.toFixed(2)}
+                              Rs.{relatedProduct.price}
                             </p>
                             <p className="text-md font-bold text-red-700">
-                              Rs.{originalPrice.toFixed(2)}
+                              Rs.{originalPrice}
                             </p>
                           </div>
                         ) : (
                           <p className="text-md font-bold text-gray-700">
-                            Rs.{relatedProduct.price.toFixed(2)}
+                            Rs.{relatedProduct.price}
                           </p>
                         )}
                       </div>

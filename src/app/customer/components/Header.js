@@ -190,41 +190,18 @@ const Header = () => {
               </button>
             </form>
 
-            <Link href="/customer/pages/cart" className="flex items-center space-x-2">
-              <FiShoppingCart className="text-gray-700 hover:text-blue-500 transition-colors duration-300" />
-              {cartItems.length > 0 && (
-                <span className="bg-red-500 text-white rounded-full px-2 py-1 text-xs font-bold">
-                  {cartItems.length}
-                </span>
-              )}
-              <span className="text-gray-700">Cart</span>
-            </Link>
-
-            {authToken ? (
-              <>
-                <Link href="/customer/pages/orders" className="text-gray-700 hover:text-blue-500 transition-colors duration-300">My Orders</Link>
-                <button
-                  onClick={handleSignOut}
-                  className="text-gray-700 hover:text-blue-500 transition-colors duration-300 flex items-center space-x-2"
-                >
-                  <FiLogOut />
-                  <span>Sign out</span>
-                </button>
-              </>
-            ) : (
-              <Link href="/customer/pages/login" className="text-gray-700 hover:text-blue-500 transition-colors duration-300">Sign in</Link>
-            )}
+           
 
             {/* Categories in Mobile Menu */}
             <div className="w-full px-4">
               {visibleCategories.map((category) => (
-                <Link
+                <a
                   key={category.id}
                   href={`/customer/pages/category/${category.id}`}
                   className="block py-2 text-gray-700 hover:text-blue-500 text-center"
                 >
                   {category.name}
-                </Link>
+                </a>
               ))}
               {hiddenCategories.length > 0 && (
                 <div className="relative">
@@ -237,19 +214,43 @@ const Header = () => {
                   {isDropdownOpen && (
                     <div className="mt-2">
                       {hiddenCategories.map((category) => (
-                        <Link
+                        <a
                           key={category.id}
                           href={`/customer/pages/category/${category.id}`}
                           className="block px-4 py-2 text-gray-700 hover:bg-gray-100 text-center"
                         >
                           {category.name}
-                        </Link>
+                        </a>
                       ))}
                     </div>
                   )}
                 </div>
               )}
             </div>
+            <a href="/customer/pages/cart" className="flex items-center space-x-2">
+              <FiShoppingCart className="text-gray-700 hover:text-blue-500 transition-colors duration-300" />
+              {cartItems.length > 0 && (
+                <span className="bg-red-500 text-white rounded-full px-2 py-1 text-xs font-bold">
+                  {cartItems.length}
+                </span>
+              )}
+              <span className="text-gray-700">Cart</span>
+            </a>
+
+            {authToken ? (
+              <>
+                <a href="/customer/pages/orders" className="text-gray-700 hover:text-blue-500 transition-colors duration-300">My Orders</a>
+                <button
+                  onClick={handleSignOut}
+                  className="text-gray-700 hover:text-blue-500 transition-colors duration-300 flex items-center space-x-2"
+                >
+                  <FiLogOut />
+                  <span>Sign out</span>
+                </button>
+              </>
+            ) : (
+              <a href="/customer/pages/login" className="text-gray-700 hover:text-blue-500 transition-colors duration-300">Sign in</a>
+            )}
           </div>
         </div>
       )}
