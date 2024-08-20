@@ -2,13 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import {jwtDecode} from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode'; // Import jwt-decode properly
+import { ThreeDots } from 'react-loader-spinner';
 
 const LoginForm = () => {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState('');
+  const [loading, setLoading] = useState(false); // Loading state for spinner
 
   useEffect(() => {
     const token = sessionStorage.getItem('authToken');
@@ -26,6 +28,7 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loading spinner
     setStatus('Logging in...');
 
     const res = await fetch('/api/login', {
@@ -38,6 +41,8 @@ const LoginForm = () => {
 
     const data = await res.json();
 
+    setLoading(false); // Stop loading spinner
+
     if (res.ok) {
       setStatus('Login successful');
       sessionStorage.setItem('authToken', data.token); // Store token in sessionStorage
@@ -47,8 +52,6 @@ const LoginForm = () => {
       console.log("User role is: " + decodedToken.role);
       if (decodedToken.role === 'CUSTOMER') {
         window.location.href = '/customer/pages/checkout';
-        
-        // router.push('/customer/pages/checkout');
       } else if (decodedToken.role === 'ADMIN') {
         router.push('/admin/pages/Products');
       }
@@ -58,8 +61,19 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="min-h-screen text-black flex items-center justify-center ">
-      <div className="bg-white  p-8 rounded-lg  w-full max-w-xl">
+    <div className="min-h-screen text-black flex items-center justify-center">
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <ThreeDots
+            height="80"
+            width="80"
+            color="#3498db"
+            ariaLabel="three-dots-loading"
+            visible={true}
+          />
+        </div>
+      )}
+      <div className={`bg-white p-8 rounded-lg w-full max-w-xl ${loading ? 'opacity-50' : ''}`}>
         <div className="flex justify-center flex-col items-center mb-6">
           <img className="w-40" src="/store2ulogo.png" alt="Logo" />
           <h2 className="text-3xl font-bold mt-4">User Login</h2>
@@ -95,6 +109,7 @@ const LoginForm = () => {
           <button
             type="submit"
             className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled={loading} // Disable button while loading
           >
             Login
           </button>
@@ -105,6 +120,7 @@ const LoginForm = () => {
           <button
             onClick={() => router.push('/customer/pages/register')}
             className="mt-2 py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+            disabled={loading} // Disable button while loading
           >
             Register
           </button>

@@ -38,29 +38,29 @@ const ProductPage = () => {
       try {
         const response = await axios.get(`/api/products/${id}`);
         const { product, relatedProducts } = response.data.data;
-
-        // Parse sizes and colors from JSON strings
+  
+        // Parse sizes and colors from JSON strings with fallback
         const parsedSizes = JSON.parse(product.sizes || '[]');
         const parsedColors = JSON.parse(product.colors || '[]');
-
+  
+        // Ensure parsedSizes and parsedColors are arrays
+        setSizes(Array.isArray(parsedSizes) ? parsedSizes : []);
+        setColors(Array.isArray(parsedColors) ? parsedColors : []);
+  
         setProduct(product);
         setRelatedProducts(relatedProducts);
-
-        // Directly set the sizes and colors from the parsed data
-        setSizes(parsedSizes);
-        setColors(parsedColors);
-
         setLoading(false);
       } catch (error) {
         console.error('Error fetching product:', error);
         setLoading(false);
       }
     };
-
+  
     if (id) {
       fetchProduct();
     }
   }, [id]);
+  
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem('cart')) || [];

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { ToastContainer, toast } from 'react-toastify';
+import { ThreeDots } from 'react-loader-spinner';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
@@ -20,6 +21,7 @@ const Register = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); // Loading state
   const router = useRouter();
 
   const handleChange = (e) => {
@@ -54,6 +56,8 @@ const Register = () => {
       return;
     }
 
+    setLoading(true); // Start loading
+
     try {
       const uploadedImageUrl = await uploadImage(formData.base64);
 
@@ -82,6 +86,8 @@ const Register = () => {
     } catch (error) {
       console.error('Error registering user:', error);
       toast.error('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -96,7 +102,6 @@ const Register = () => {
       });
       const result = await response.json();
       if (response.ok) {
-        console.log(result.image_url);
         return result.image_url; // This should be the exact key returned by your upload endpoint
       } else {
         throw new Error(result.error || 'Failed to upload image');
@@ -115,6 +120,7 @@ const Register = () => {
     <div className="min-h-screen flex text-black items-center justify-center bg-gray-100 pt-7 mt-8">
       <form className="bg-white p-8 rounded shadow-md w-full max-w-md mt-8" onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold mb-6">Register</h2>
+
         <div className="mb-4">
           <label className="block text-gray-700">Name</label>
           <input
@@ -194,10 +200,30 @@ const Register = () => {
           />
         </div>
         
-        <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-md">
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white py-2 rounded-md flex justify-center items-center"
+          disabled={loading} // Disable button while loading
+        >
           Register
         </button>
       </form>
+
+      {/* Loading Spinner */}
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <ThreeDots
+            height="80"
+            width="80"
+            radius="9"
+            color="#ffffff"
+            ariaLabel="three-dots-loading"
+            wrapperStyle={{}}
+            visible={true}
+          />
+        </div>
+      )}
+
       <ToastContainer /> {/* Add ToastContainer */}
     </div>
   );

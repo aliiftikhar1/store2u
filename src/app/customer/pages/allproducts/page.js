@@ -1,183 +1,230 @@
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
-import axios from 'axios';
-import { motion } from 'framer-motion';
-import { ThreeDots } from 'react-loader-spinner';
-import { useDispatch } from 'react-redux';
-import { addToCart, setCart } from '@/app/store/cartSlice';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Oval } from 'react-loader-spinner';
 
-const AllProducts = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [cart, setCartState] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const dispatch = useDispatch();
+const Register = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '', 
+    phoneno: '',
+    city: '',
+    role: 'CUSTOMER', 
+    image: null,
+    base64: '',
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); 
   const router = useRouter();
 
-  const fetchProducts = useCallback(async (query) => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`/api/products/search/${encodeURIComponent(query)}`);
-      const fetchedProducts = response.data.data.map(product => ({
-        ...product,
-        images: JSON.parse(product.images), // Parse the images field to convert it to an array
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        image: file,
+        base64: reader.result.split(',')[1], 
       }));
-      setProducts(fetchedProducts);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    const handleRouteChange = () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const query = urlParams.get('search') || '';
-      setSearchQuery(query);
-      fetchProducts(query);
     };
 
-    // Initial load
-    handleRouteChange();
+    reader.readAsDataURL(file);
+  };
 
-    // Detect URL changes using a custom interval
-    const interval = setInterval(() => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const query = urlParams.get('search') || '';
-      if (query !== searchQuery) {
-        handleRouteChange();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match!");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const uploadedImageUrl = await uploadImage(formData.base64);
+
+      const formDataToSend = {
+        ...formData,
+        imageUrl: uploadedImageUrl,  
+        base64: '', 
+        confirmPassword: '', 
+      };
+
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formDataToSend),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        toast.success('User registered successfully!');
+        router.push('/customer/pages/login');
+      } else {
+        toast.error(`Error: ${data.message || 'Failed to register user'}`);
       }
-    }, 1000); // Adjust the interval time as needed
-
-    // Cleanup the interval on component unmount
-    return () => {
-      clearInterval(interval);
-    };
-  }, [fetchProducts, searchQuery]);
-
-  const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
-    alert(`${product.name} has been added to the cart.`);
-  };
-
-  const handleProductClick = (id) => {
-    router.push(`/customer/pages/products/${id}`);
-  };
-
-  const calculateOriginalPrice = (price, discount) => {
-    if (typeof price === 'number' && typeof discount === 'number') {
-      return price - (price * (discount / 100));
+    } catch (error) {
+      console.error('Error registering user:', error);
+      toast.error('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
     }
-    return price;
   };
 
-  useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
-    setCartState(storedCart);
-    dispatch(setCart(storedCart));
-  }, [dispatch]);
+  const uploadImage = async (base64) => {
+    try {
+      const response = await fetch('https://data.tascpa.ca/uploadImage.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ image: base64 }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        return result.image_url; 
+      } else {
+        throw new Error(result.error || 'Failed to upload image');
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw error;
+    }
+  };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <ThreeDots
-          height="80"
-          width="80"
-          radius="9"
-          color="#3498db"
-          ariaLabel="three-dots-loading"
-          visible={true}
-        />
-      </div>
-    );
-  }
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-        {products.length > 0 ? (
-          products.map((product) => {
-            const originalPrice = calculateOriginalPrice(product.price, product.discount);
-            return (
-              <div
-                key={product.id}
-                className="bg-white shadow-md rounded-lg cursor-pointer border border-gray-300 relative h-[430px]"
-              >
-                {product.discount && (
-                  <div className="absolute z-40 top-2 right-2 bg-black text-white rounded-full h-10 w-10 flex items-center justify-center">
-                    -{product.discount}%
-                  </div>
-                )}
-                {/* {product.stock ===0 && (
-                <div className="absolute z-40 top-4 left-1 bg-red-500 text-white  h-6 w-20 flex items-center justify-center">
-                  Out Stock
-                </div>
-              )}
-              {product.stock >0 && (
-                <div className="absolute z-40 top-4 left-0 bg-green-500 text-white  h-6  w-20 flex items-center justify-center">
-                  In Stock 
-                </div>
-              )} */}
-                {product.images && product.images.length > 0 ? (
-                  <motion.img
-                    src={`https://data.tascpa.ca/uploads/${product.images[0]}`}
-                    alt={product.name}
-                    className="h-80 w-full object-cover mb-4 rounded"
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.3 }}
-                    onClick={() => handleProductClick(product.id)}
-                  />
-                ) : (
-                  <div
-                    className="h-96 w-full bg-gray-200 mb-4 rounded flex items-center justify-center text-gray-500"
-                    onClick={() => handleProductClick(product.id)}
-                  >
-                    No Image
-                  </div>
-                )}
-                <h3 className="pt-4 px-2 text-md font-normal text-gray-800 overflow-hidden text-ellipsis whitespace-nowrap">
-                  {product.name}
-                </h3>
-                <div className="grid grid-cols-2">
-                  <div className="flex items-center px-2">
-                    {product.discount ? (
-                      <div className="flex flex-col">
-                        <p className="text-md font-normal text-gray-700 line-through mr-2">
-                          Rs.{product.price}
-                        </p>
-                        <p className="text-md font-normal text-red-700">
-                          Rs.{originalPrice}
-                        </p>
-                      </div>
-                    ) : (
-                      <p className="text-md font-normal text-gray-700">
-                        Rs.{product.price}
-                      </p>
-                    )}
-                  </div>
-                  <div className="flex justify-end">
-                    <button
-                      className="border h-10 w-24 text-white font-semibold flex justify-center items-center text-sm hover:scale-110 rounded-full mx-1 my-1 bg-blue-500 shadow-lg"
-                      onClick={() => handleProductClick(product.id)}
-                    >
-                      Shop Now
-                    </button>
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        ) : (
-          <div className="text-center col-span-full py-8 text-gray-500">
-            No products found for "{searchQuery}".
-          </div>
-        )}
-      </div>
+    <div className="min-h-screen flex text-black items-center justify-center bg-gray-100 pt-7 mt-8">
+      <form className="bg-white p-8 rounded shadow-md w-full max-w-md mt-8" onSubmit={handleSubmit}>
+        <h2 className="text-2xl font-bold mb-6">Register</h2>
+
+        <div className="mb-4">
+          <label className="block text-gray-700">Name</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-md"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-md"
+            required
+          />
+        </div>
+        <div className="mb-4 relative">
+          <label className="block text-gray-700">Password</label>
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-md"
+            required
+          />
+          <span
+            className="absolute right-3 top-10 cursor-pointer"
+            onClick={togglePasswordVisibility}
+          >
+            {showPassword ? <FiEyeOff /> : <FiEye />}
+          </span>
+        </div>
+        <div className="mb-4 relative">
+          <label className="block text-gray-700">Confirm Password</label>
+          <input
+            type={showPassword ? "text" : "password"}
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-md"
+            required
+          />
+          <span
+            className="absolute right-3 top-10 cursor-pointer"
+            onClick={togglePasswordVisibility}
+          >
+            {showPassword ? <FiEyeOff /> : <FiEye />}
+          </span>
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Phone Number</label>
+          <input
+            type="text"
+            name="phoneno"
+            value={formData.phoneno}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-md"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Address</label>
+          <input
+            type="text"
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-md"
+            required
+          />
+        </div>
+        
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white py-2 rounded-md flex justify-center items-center"
+          disabled={loading} 
+        >
+          Register
+        </button>
+      </form>
+
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <Oval
+            height={80}
+            width={80}
+            color="#3498db"
+            secondaryColor="#ebf2f9"
+            strokeWidth={2}
+            strokeWidthSecondary={2}
+            ariaLabel="oval-loading"
+          />
+        </div>
+      )}
+
+      <ToastContainer /> 
     </div>
   );
 };
 
-export default AllProducts;
+export default Register;

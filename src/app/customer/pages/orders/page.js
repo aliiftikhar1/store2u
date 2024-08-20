@@ -66,11 +66,10 @@ const UserOrders = () => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <ThreeDots
-          height="80"
-          width="80"
-          radius="9"
+          height={80}
+          width={80}
           color="#3498db"
-          ariaLabel="three-dots-loading"
+          ariaLabel="circle-loading"
           visible={true}
         />
       </div>
@@ -81,6 +80,13 @@ const UserOrders = () => {
     return <div className="text-center text-red-500">{error}</div>;
   }
 
+  const statusClasses = {
+    PENDING: 'bg-gray-300 text-gray-700',
+    PAID: 'bg-gray-300 text-gray-700',
+    SHIPPED: 'bg-gray-300 text-gray-700',
+    COMPLETED: 'bg-gray-300 text-gray-700',
+    CANCELLED: 'bg-gray-300 text-gray-700',
+  };
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <div className="bg-white shadow rounded-lg p-4">
@@ -180,10 +186,6 @@ const UserOrders = () => {
                         <p className="text-md font-medium text-gray-700">Subtotal:</p>
                         <p className="text-xl text-gray-700">Rs.{subtotalLessDiscount}</p>
                       </div>
-                      {/* <div className="flex justify-between">
-                        <p className="text-md font-medium text-gray-700">Tax ({(taxRate * 100)}%):</p>
-                        <p className="text-md text-gray-700">Rs.{totalTax}</p>
-                      </div> */}
                       <div className="flex justify-between">
                         <p className="text-md font-medium text-gray-700">Delivery Charges:</p>
                         <p className="text-md text-gray-700">Rs.{deliveryCharge}</p>
@@ -200,6 +202,18 @@ const UserOrders = () => {
                     </>
                   );
                 })()}
+              </div>
+              <div className="mt-4 flex space-x-2">
+                {Object.keys(statusClasses).map((status) => (
+                  <span
+                    key={status}
+                    className={`px-4 py-2 rounded-full text-xs font-semibold ${
+                      selectedOrder.status === status ? 'bg-green-500 text-white' : statusClasses[status]
+                    }`}
+                  >
+                    {status}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
