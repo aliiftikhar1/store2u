@@ -1,13 +1,8 @@
 {
-  "/api/products/[id]/route": "app/api/products/[id]/route.js",
-  "/api/products/route": "app/api/products/route.js",
+  "/page": "app/page.js",
   "/api/categories/route": "app/api/categories/route.js",
-  "/api/colors/route": "app/api/colors/route.js",
-  "/api/sizes/route": "app/api/sizes/route.js",
-  "/api/subcategories/route": "app/api/subcategories/route.js",
-  "/customer/pages/products/[id]/page": "app/customer/pages/products/[id]/page.js",
-  "/admin/pages/categories/page": "app/admin/pages/categories/page.js",
-  "/admin/pages/Products/page": "app/admin/pages/Products/page.js",
-  "/customer/pages/category/[id]/page": "app/customer/pages/category/[id]/page.js",
-  "/admin/pages/add-product/page": "app/admin/pages/add-product/page.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/api/products/search/[id]/route": "app/api/products/search/[id]/route.js",
+  "/customer/pages/login/page": "app/customer/pages/login/page.js",
+  "/customer/pages/allproducts/page": "app/customer/pages/allproducts/page.js"
 }
