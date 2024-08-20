@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import prisma from '../../../util/prisma';
-export async function PUT(request, { params }) {
+
+export async function POST(request) {
   try {
-    const id = parseInt(params.id);
+    const data = await request.json();
     const {
       name,
       description,
@@ -13,54 +14,60 @@ export async function PUT(request, { params }) {
       sizes,
       images,
       discount,
-      isTopRated = false  // Default to false if not provided
-    } = await request.json();
+      isTopRated
+    } = data;
 
-    // Update the product details
-    const updatedProduct = await prisma.product.update({
-      where: { id },
+    // Ensure colors and sizes are in the correct format (array of objects with value and label)
+    if (!Array.isArray(colors) || !Array.isArray(sizes)) {
+      throw new Error('Colors and sizes must be arrays');
+    }
+
+    const formattedColors = colors.map(color => {
+      if (typeof color === 'string') {
+        return JSON.parse(color);  // Handle case where it's already stringified
+      }
+      return color;  // If it's already in object format, use it as is
+    });
+
+    const formattedSizes = sizes.map(size => {
+      if (typeof size === 'string') {
+        return JSON.parse(size);  // Handle case where it's already stringified
+      }
+      return size;  // If it's already in object format, use it as is
+    });
+
+    const newProduct = await prisma.product.create({
       data: {
         name,
         description,
         price: parseFloat(price),
         stock: parseInt(stock),
-        subcategoryId: subcategoryId ? parseInt(subcategoryId) : null,
-        colors: colors ? JSON.stringify(colors) : null,
-        sizes: sizes ? JSON.stringify(sizes) : null,
+        subcategoryId: parseInt(subcategoryId),
+        colors: JSON.stringify(formattedColors), // Store colors as JSON string
+        sizes: JSON.stringify(formattedSizes), // Store sizes as JSON string
         discount: discount ? parseFloat(discount) : null,
-        isTopRated: isTopRated,  // Ensure isTopRated is set to the provided value or false by default
+        isTopRated: isTopRated || false,
+        createdAt: new Date(),
         updatedAt: new Date(),
+        images: {
+          create: images.map(url => ({ url })),
+        },
+      },
+      include: {
+        images: true,
       },
     });
 
-    // Update images
-    if (images && images.length > 0) {
-      // Delete existing images
-      await prisma.image.deleteMany({
-        where: { productId: id },
-      });
-
-      // Add new images
-      await prisma.image.createMany({
-        data: images
-          .filter((base64) => base64) // Filter out null or undefined values
-          .map((base64) => ({
-            url: base64,
-            productId: id,
-          })),
-      });
-    }
-
     return NextResponse.json({
       status: 200,
-      message: 'Product updated successfully',
-      data: updatedProduct,
+      message: 'Product created successfully',
+      data: newProduct,
     });
   } catch (error) {
-    console.error('Error updating product:', error);
+    console.error('Error creating product:', error);
     return NextResponse.json(
       {
-        message: 'Failed to update product',
+        message: 'Failed to create product',
         status: false,
         error: error.message,
       },

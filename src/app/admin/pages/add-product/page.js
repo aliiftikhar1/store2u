@@ -110,7 +110,7 @@ const AddProductPageContent = () => {
       return;
     }
     setIsLoading(true);
-
+  
     try {
       const uploadedImages = await Promise.all(images.map(async (img) => {
         const imageBase64 = await convertToBase64(img);
@@ -128,22 +128,22 @@ const AddProductPageContent = () => {
           throw new Error(result.error || 'Failed to upload image');
         }
       }));
-
+  
       const productToSubmit = {
         ...newProduct,
         description: newProduct.richDescription, // Directly save the rich text HTML content
         price: parseFloat(newProduct.price),
         stock: parseInt(newProduct.stock),
         subcategoryId: parseInt(newProduct.subcategoryId),
-        colors: JSON.stringify(newProduct.colors.map(color => ({ id: color.value, name: color.label }))),
-        sizes: JSON.stringify(newProduct.sizes.map(size => ({ id: size.value, name: size.label }))),
+        colors: JSON.stringify(newProduct.colors), // Store as JSON string with value and label
+        sizes: JSON.stringify(newProduct.sizes), // Store as JSON string with value and label
         images: uploadedImages,
         discount: newProduct.discount ? parseFloat(newProduct.discount) : null,
         isTopRated: newProduct.isTopRated,
       };
-
+  
       console.log('Sending product data to server:', productToSubmit);
-
+  
       const response = await fetch(`/api/products`, {
         method: 'POST',
         headers: {
@@ -151,7 +151,7 @@ const AddProductPageContent = () => {
         },
         body: JSON.stringify(productToSubmit),
       });
-
+  
       if (response.ok) {
         router.push('/admin/pages/Products');
       } else {
@@ -195,8 +195,8 @@ const AddProductPageContent = () => {
         price: parseFloat(newProduct.price),
         stock: parseInt(newProduct.stock),
         subcategoryId: parseInt(newProduct.subcategoryId),
-        colors: JSON.stringify(newProduct.colors.map(color => ({ id: color.value, name: color.label }))),
-        sizes: JSON.stringify(newProduct.sizes.map(size => ({ id: size.value, name: size.label }))),
+        colors: newProduct.colors.map(color => color.value), // Convert to array of color IDs
+        sizes: newProduct.sizes.map(size => size.value), // Convert to array of size IDs
         images: [...existingImages, ...uploadedImages],
         discount: newProduct.discount ? parseFloat(newProduct.discount) : null,
         isTopRated: newProduct.isTopRated,
@@ -337,15 +337,15 @@ const AddProductPageContent = () => {
             </div>
             <div className="mb-4 grid grid-cols-2 ">
               <div>
-              <label className="block text-sm font-medium text-gray-700">Top Rated</label>
+                <label className="block text-sm font-medium text-gray-700">Top Rated</label>
               </div>
               <div className='flex justify-start items-start'>
-              <input
-                type="checkbox"
-                checked={newProduct.isTopRated}
-                onChange={(e) => setNewProduct({ ...newProduct, isTopRated: e.target.checked })}
-                className="mt-1 p-2 border h-5 border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+                <input
+                  type="checkbox"
+                  checked={newProduct.isTopRated}
+                  onChange={(e) => setNewProduct({ ...newProduct, isTopRated: e.target.checked })}
+                  className="mt-1 p-2 border h-5 border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
               </div>
             </div>
             <div className="mb-4">

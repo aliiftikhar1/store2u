@@ -28,8 +28,8 @@ export async function POST(request) {
         price: parseFloat(price),
         stock: parseInt(stock),
         subcategoryId: parseInt(subcategoryId),
-        colors: JSON.stringify(colors),
-        sizes: JSON.stringify(sizes),
+        colors, // Already a JSON string, no need to stringify
+        sizes,  // Already a JSON string, no need to stringify
         discount: discount ? parseFloat(discount) : null,
         isTopRated: isTopRated || false,
         createdAt: new Date(),
